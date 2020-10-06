@@ -4,8 +4,7 @@
 #include "Token.h"
 
 int main() {
-    // std::string input = "1.23 + 2 * (1+2/5-4)";
-    std::string input = "1 + 2 * 3";
+    std::string input = "sqrt(sin(PI / 6) * sin(PI / 6) + cos(PI /6) * cos(PI /6))";
     try {
         auto [result, res] = parseExpress(input);
         std::cout << result << std::endl;

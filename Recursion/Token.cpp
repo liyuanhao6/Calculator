@@ -1,6 +1,20 @@
 #include "Token.h"
 
-std::tuple<double, std::string> parseNumber(std::string input) {
+// 符号表
+static std::unordered_map<std::string, std::variant<double, std::function<double(double)>>>
+    SymbolTable{{"PI", atan(1.0) * 4},
+                {"e", exp(1.0)},
+                {"sin", [](double val) { return sin(val); }},
+                {"cos", [](double val) { return cos(val); }},
+                {"tan", [](double val) { return tan(val); }},
+                {"asin", [](double val) { return asin(val); }},
+                {"acos", [](double val) { return acos(val); }},
+                {"atan", [](double val) { return atan(val); }},
+                {"sqrt", [](double val) { return sqrt(val); }},
+                {"exp", [](double val) { return exp(val); }}};
+
+// 解析数字
+static std::tuple<double, std::string> parseNumber(std::string input) {
     double result = 0;     // 结果
     bool firstDot = true;  // 第一次遇到小数点
     std::string numstr;    // 数字字符串
@@ -17,6 +31,28 @@ std::tuple<double, std::string> parseNumber(std::string input) {
             break;
     }
     return {std::stod(numstr), input};
+}
+
+// 解析英文字母
+static std::tuple<std::string, std::string> parseSymbol(std::string input) {
+    std::string symbol;
+    while (true) {
+        // 如果为空
+        if (input.empty()) break;
+        char ch = input.front();  // 输入字符串的首字符
+        if (isalpha(ch)) {
+            symbol.push_back(ch);
+            input.erase(input.begin());
+        } else
+            break;
+    }
+    return {symbol, input};
+}
+std::optional<std::variant<double, std::function<double(double)>>> getSymbolValue(
+    std::string symbol) {
+    auto iter = SymbolTable.find(symbol);
+    if (iter != SymbolTable.end()) return {iter->second};
+    return {};
 }
 
 std::tuple<Token, std::string> tokenize(std::string input) {
@@ -46,7 +82,7 @@ std::tuple<Token, std::string> tokenize(std::string input) {
     case ')':
         tk.type = TokenType(ch);
         break;
-    // 定义数字
+        // 定义数字
     case '0':
     case '1':
     case '2':
@@ -62,9 +98,15 @@ std::tuple<Token, std::string> tokenize(std::string input) {
         input.insert(input.begin(), ch);
         std::tie(tk.value, input) = parseNumber(input);
         break;
-    // 错误
+        // 错误
     default:
-        throw std::runtime_error{"error: invalid symbol!\n"};
+        // 判断是否是英文字母
+        if (isalpha(ch)) {
+            tk.type = TokenType::Symbol;
+            input.insert(input.begin(), ch);
+            std::tie(tk.value, input) = parseSymbol(input);
+        } else
+            throw std::runtime_error{"error: invalid symbol!\n"};
         break;
     }
     return {tk, input};
