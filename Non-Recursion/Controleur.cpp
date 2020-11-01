@@ -28,13 +28,32 @@ void Controleur::commande(const std::string &c) {
         lirAff.push_back(lirManager.addLitterale(toRationnelle(ConstNum)));
         setMessage("");
     } else if (type == "Atome") {
-        auto fun = std::get<std::function<double(double)>>(estQuelFunction(c, "Function"));
-        double value = lirAff[lirAff.size() - 1]->toDouble();
-        lirManager.removeLitterale(lirAff[lirAff.size() - 1]);
-        lirAff.pop_back();
-        double res = fun(value);
-        lirAff.push_back(lirManager.addLitterale(toRationnelle(res)));
-        setMessage("");
+        if (estUnOperateurUnaire(c)) {
+            if (lirAff.size() >= 1) {
+                auto fun = std::get<std::function<double(double)>>(estQuelFunction(c, "UnaireFunction"));
+                double value = lirAff[lirAff.size() - 1]->toDouble();
+                lirManager.removeLitterale(lirAff[lirAff.size() - 1]);
+                lirAff.pop_back();
+                double res = fun(value);
+                lirAff.push_back(lirManager.addLitterale(toRationnelle(res)));
+                setMessage("");
+            } else
+                this->setMessage("Erreur : pas assez d'arguments");
+        } else if (estUnOperateurBinaire(c)) {
+            if (this->lirAff.size() >= 2) {
+                auto fun = std::get<std::function<double(double, double)>>(estQuelFunction(c, "BinaireFunction"));
+                double value1 = lirAff[lirAff.size() - 1]->toDouble();
+                lirManager.removeLitterale(lirAff[lirAff.size() - 1]);
+                lirAff.pop_back();
+                double value2 = lirAff[lirAff.size() - 1]->toDouble();
+                lirManager.removeLitterale(lirAff[lirAff.size() - 1]);
+                lirAff.pop_back();
+                double res = fun(value2, value1);
+                lirAff.push_back(lirManager.addLitterale(toRationnelle(res)));
+                setMessage("");
+            } else
+                setMessage("Erreur : pas assez d'arguments");
+        } else if (1) {}
     } else if (type == "Fraction") {
         unsigned int pos = c.find("/");
         unsigned int len = c.length();
@@ -44,7 +63,7 @@ void Controleur::commande(const std::string &c) {
         double numerateur = std::stod(t2);
         lirAff.push_back(lirManager.addLitterale(getFraction(numerateur, denominateur)));
         setMessage("");
-    } else if (type == "Rationnelle"){
+    } else if (type == "Rationnelle") {
         auto num = std::stod(c);
         lirAff.push_back(lirManager.addLitterale(toRationnelle(num)));
         setMessage("");

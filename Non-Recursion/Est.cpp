@@ -4,8 +4,8 @@
 
 #include "Est.h"
 
-std::optional<std::variant<double, std::function<double(double)>>>
-estQuelSymbol(const std::string symbol, const std::string str) {
+std::optional<std::variant<double, std::function<double(double)>, std::function<double(double, double)>>>
+estQuelSymbol(std::string symbol, std::string str) {
     if (str == "Const") {
         auto iter1 = SymbolTable.find(str);
         if (iter1 != SymbolTable.end()) {
@@ -14,7 +14,7 @@ estQuelSymbol(const std::string symbol, const std::string str) {
             if (iter2 != table.end()) return {iter2->second};
             else return {};
         } else return {};
-    } else if (str == "Function") {
+    } else if (str == "UnaireFunction") {
         auto iter1 = SymbolTable.find(str);
         if (iter1 != SymbolTable.end()) {
             auto table = std::get<std::unordered_map<std::string, std::function<double(double)>>>(iter1->second);
@@ -22,18 +22,33 @@ estQuelSymbol(const std::string symbol, const std::string str) {
             if (iter2 != table.end()) return {iter2->second};
             else return {};
         } else return {};
-    } else return {};
+    } else if (str == "BinaireFunction") {
+        auto iter1 = SymbolTable.find(str);
+        if (iter1 != SymbolTable.end()) {
+            auto table = std::get<std::unordered_map<std::string, std::function<double(double, double)>>>(iter1->second);
+            auto iter2 = table.find(symbol);
+            if (iter2 != table.end()) return {iter2->second};
+            else return {};
+        } else
+            return {};
+    }
 }
 
-std::variant<double, std::function<double(double)>> estQuelFunction(const std::string symbol, const std::string str) {
+
+std::variant<double, std::function<double(double)>, std::function<double(double, double)>>
+estQuelFunction(std::string symbol, std::string str) {
     auto search = estQuelSymbol(symbol, str);
     if (search) {
         if (std::holds_alternative<double>(search.value())) {
             double result = std::get<double>(search.value());
             return result;
-        } else {
+        } else if (std::holds_alternative<std::function<double(double)>>(search.value())) {
             // 得到函数本体
             auto fun = std::get<std::function<double(double)>>(search.value());
+            return fun;
+        } else {
+            // 得到函数本体
+            auto fun = std::get<std::function<double(double, double)>>(search.value());
             return fun;
         }
     } else
@@ -65,7 +80,6 @@ bool estUnOperateurUnaire(const std::string &s) {
     if (s == "NUM") return true;
     if (s == "DEN") return true;
     if (s == "NOT") return true;
-    if (s == "DROP") return true;
     return false;
 }
 

@@ -14,14 +14,15 @@
 #include "SymbolTable.h"
 
 // 判断是哪个符号
-std::optional<std::variant<double, std::function<double(double)>>>
-estQuelSymbol(const std::string symbol, const std::string str);
+std::optional<std::variant<double, std::function<double(double)>, std::function<double(double, double)>>>
+estQuelSymbol(std::string symbol, std::string str);
 
 // 判断是哪个函数
-std::variant<double, std::function<double(double)>> estQuelFunction(const std::string symbol, const std::string str);
+std::variant<double, std::function<double(double)>, std::function<double(double, double)>>
+estQuelFunction(std::string symbol, std::string str);
 
 // 判断是哪个常量
-double estQuelConst(const std::string symbol);
+double estQuelConst(std::string symbol);
 
 // 判断是否为一元操作符
 bool estUnOperateurUnaire(const std::string &s);

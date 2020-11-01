@@ -16,7 +16,7 @@ std::unordered_map<std::string, double>
                    {"e",  exp(1.0)}};
 
 std::unordered_map<std::string, std::function<double(double)>>
-        FunctionTable{{
+        UnaireFunctionTable{{
                               {"NEG", [](double val) { return -val; }},
                               {"SQRT", [](double val) { return sqrt(val); }},
                               {"EXP", [](double val) { return exp(val); }},
@@ -31,8 +31,30 @@ std::unordered_map<std::string, std::function<double(double)>>
                               {"DEN", [](double val) { return (val - int(val) == 0) ? 1 : val - int(val); }},
                               {"NOT", [](double val) { return (!val); }}}};
 
-std::unordered_map<std::string, std::variant<std::unordered_map<std::string, double>, std::unordered_map<std::string, std::function<double(double)>>>>
-        SymbolTable{{"Const", ConstTable}, {"Function", FunctionTable}};
+std::unordered_map<std::string, std::function<double(double,double)>>
+        BinaireFunctionTable{{
+                              {"+", [](double val1, double val2) { return val1 + val2; }},
+                              {"-", [](double val1, double val2) { return val1 - val2; }},
+                              {"*", [](double val1, double val2) { return val1 * val2; }},
+                              {"/", [](double val1, double val2) { return val1 / val2; }},
+                              {"DIV", [](double val1, double val2) { return int(val1 / val2); }},
+                              {"POW", [](double val1, double val2) { return pow(val1, val2); }},
+                              {"=", [](double val1, double val2) { return val1 == val2; }},
+                              {"!=", [](double val1, double val2) { return val1 != val2; }},
+                              {"<=", [](double val1, double val2) { return val1 <= val2; }},
+                              {">=", [](double val1, double val2) { return val1 >= val2; }},
+                              {"<", [](double val1, double val2) { return val1 < val2; }},
+                              {">", [](double val1, double val2) { return val1 > val2; }},
+                              {"<", [](double val1, double val2) { return val1 < val2; }},
+                              {"AND", [](double val1, double val2) { return val1 && val2; }},
+                              {"OR", [](double val1, double val2) { return val1 || val2; }}
+                              }};
 
+std::unordered_map<std::string,
+                   std::variant<
+                           std::unordered_map<std::string, double>,
+                           std::unordered_map<std::string, std::function<double(double)>>,
+                           std::unordered_map<std::string, std::function<double(double, double)>>>>
+        SymbolTable{{"Const", ConstTable}, {"UnaireFunction", UnaireFunctionTable}, {"BinaireFunction", BinaireFunctionTable}};
 
 #endif //PROJECT_SYMBOLTABLE_H
