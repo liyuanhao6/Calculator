@@ -33,16 +33,14 @@ void LitteraleFraction::simplification() {
         denominateur = 1;
         return;
     }
-    if (denominateur == 0) throw ComputerException("créer une Fraction avec le value zéro de dénominateur");
     int a = numerateur, b = denominateur;
     if (a < 0) a = -a;
     if (b < 0) b = -b;
-    while (a != b) {
+    while (a != b)
         if (a > b)
             a = a - b;
         else
             b = b - a;
-    }
     numerateur /= a;
     denominateur /= a;
     if (denominateur < 0) {
@@ -64,29 +62,40 @@ std::string LitteraleProgramme::toString() {
         ss << a->toString() << " ";
     }
     str_all = ss.str();
-    size_t num_last_not_space = str_all.find_last_not_of(" ");
+    size_t num_last_not_space = str_all.find_last_not_of(' ');
     str_all.erase(num_last_not_space + 1);
-    return "[" + str_all + "]";
+    return "[ " + str_all + " ]";
 }
 
 /*litteralprogramme operateur de list*/
-void LitteraleProgramme::elementsPushBack(Litterale *newlitterale) {
-    this->elements.push_back(newlitterale);
-}
-
-void LitteraleProgramme::elementsPopBack() {
-    this->elements.pop_back();
-}
-
-void LitteraleProgramme::elementsSupprimer(Litterale *sup) {
-    auto it = find(this->elements.begin(), this->elements.end(), sup);
-    if (it == this->elements.end()) {
-        throw ComputerException("L'élément à supprimer n'exisite pas!");
-    } else {
-        this->elements.erase(it);
+LitteraleProgramme::LitteraleProgramme(std::string programme) {
+    for (unsigned int i = 1; i < programme.size() && programme[i] != ']'; i++) {
+        if (programme[i] == ' ') continue;
+        else if (programme[i] == '[') {
+            unsigned int j = 0;
+            while (programme[i + j] != ']') j++;
+            elementsPushBack(toLitterale(programme.substr(i, j + 1)));
+            i += j;
+        } else {
+            unsigned int j = 0;
+            while (programme[i + j] != ' ') j++;
+            elementsPushBack(toLitterale(programme.substr(i, j)));
+            i += (j - 1);
+        }
     }
 }
 
+Litterale *LitteraleProgramme::getFirstElement() {
+    Litterale *temp = elements.front();
+    elements.pop_front();
+    return temp;
+}
+
+unsigned int LitteraleProgramme::getLength() { return elements.size(); }
+
+void LitteraleProgramme::elementsPushBack(Litterale *newlitterale) {
+    this->elements.push_back(newlitterale);
+}
 
 /*toDouble*/
 double LitteraleEntiere::toDouble() const {
@@ -107,7 +116,6 @@ double LitteraleRationnelle::toDouble() const {
     return this->partie_entiere + this->partie_decimale * pow(10, -size_decimale);
 }
 
-
 /*toRationnelle*/
 LitteraleNumerique *toRationnelle(double num_double) {
     if (num_double == static_cast<int>(num_double))
@@ -123,42 +131,105 @@ LitteraleNumerique *toRationnelle(double num_double) {
     char ch;
     ss << num_double;
     ss >> num_partie_entiere >> ch >> num_mantisse;
-    if (sign == false) {
+    if (!sign) {
         num_partie_entiere = -num_partie_entiere;
     }
     return LitteraleRationnelle(num_partie_entiere, num_mantisse).simplifier();
 
 }
 
+LitteraleNumerique *getFraction(int n, int d) { return new LitteraleFraction(n, d); }
 
-std::string getFirstLitterale(std::string str) {
-    if (str.find("!=") == 0 || str.find("<=") == 0 || str.find(">=") == 0) {
-        std::string str_first(str, 0, 2);
-        return str_first;
-    } else if (str.find("=") == 0 || str.find("<") == 0 || str.find(">") == 0) {
-        std::string str_first(str, 0, 1);
-        return str_first;
-    } else if (str.find("[") == 0) {
-        size_t left = 0, right = 0;
-        do {
-            left = str.find_first_of("[", left + 1);
-            right = str.find_first_of("]", right + 1);
-        } while (left < right);
-        std::string str_first(str, 0, right + 1);
-        return str_first;
-    } else {
-        std::string str_first;
-        std::stringstream ss;
-        ss << str;
-        ss >> str_first;
-        if (str_first.find("[") < str_first.size()) {
-            str_first = str_first.erase(str_first.find("[") - 1);
-        }
-        if (str_first == "\"EXIT\"") {
-            throw ComputerException("");
-        }
-        return str_first;
-    }
+Litterale *toLitterale(const std::string &s) {
+    std::string type = estQuelType(s);
+    if (type == "Programme")
+        return new LitteraleProgramme(s);
+    else if (type == "Expression")
+        return new LitteraleExpression(s);
+    else if (type == "Symbol") {
+        return toLitterale(getSymbol(s));
+    } else if (type == "OperateurNotParameter" || type == "OperateurUnaire" || type == "OperateurBinaire")
+        return new LitteraleAtome(s);
+    else if (type == "Fraction") {
+        unsigned int pos = s.find('/');
+        unsigned int len = s.length();
+        std::string t1 = s.substr(pos + 1, len - pos);
+        int denominateur = std::stoi(t1);
+        std::string t2 = s.substr(0, pos);
+        int numerateur = std::stoi(t2);
+        return getFraction(numerateur, denominateur);
+    } else if (type == "Rationnelle") {
+        auto num = std::stod(s);
+        return toRationnelle(num);
+    } else if (type == "Entiere") {
+        auto num = std::stod(s);
+        return toRationnelle(num);
+    } else
+        return toLitterale(s);
 }
 
-LitteraleNumerique *getFraction(int n, int d) { return new LitteraleFraction(n, d); }
+std::string estQuelType(const std::string &s) {
+    if (s.find('[') != std::string::npos) return "Programme";
+    else if (s.find('\"') != std::string::npos) return "Expression";
+    else if (estExist(s)) return "Symbol";
+    else if (estUnOperateurNotParameter(s))return "OperateurNotParameter";
+    else if (estUnOperateurUnaire(s)) return "OperateurUnaire";
+    else if (estUnOperateurBinaire(s)) return "OperateurBinaire";
+    else if (s.find('/') != std::string::npos) return "Fraction";
+    else if (s.find('.') != std::string::npos) return "Rationnelle";
+    else if ((std::stod(s) - int(std::stod(s))) == 0) return "Entiere";
+    else throw ("输入错误");
+}
+
+bool estUnOperateurNotParameter(const std::string &s) {
+    if (s == "DUP") return true;
+    if (s == "DROP") return true;
+    if (s == "SWAP") return true;
+    if (s == "CLEAR") return true;
+    if (s == "UNDO") return true;
+    if (s == "REDO") return true;
+    if (s == "IFT") return true;
+    if (s == "IFTF") return true;
+    if (s == "WHILE") return true;
+    return false;
+}
+
+bool estUnOperateurUnaire(const std::string &s) {
+    if (s == "NEG") return true;
+    if (s == "SQRT") return true;
+    if (s == "EXP") return true;
+    if (s == "LN") return true;
+    if (s == "COS") return true;
+    if (s == "SIN") return true;
+    if (s == "TAN") return true;
+    if (s == "ARCSIN") return true;
+    if (s == "ARCCOS") return true;
+    if (s == "ARCTAN") return true;
+    if (s == "NUM") return true;
+    if (s == "DEN") return true;
+    if (s == "NOT") return true;
+    if (s == "EVAL") return true;
+    if (s == "FORGET") return true;
+    return false;
+}
+
+bool estUnOperateurBinaire(const std::string &s) {
+    if (s == "+") return true;
+    if (s == "-") return true;
+    if (s == "*") return true;
+    if (s == "/") return true;
+    if (s == "DIV") return true;
+    if (s == "MOD") return true;
+    if (s == "POW") return true;
+    if (s == "=") return true;
+    if (s == "!=") return true;
+    if (s == "<") return true;
+    if (s == ">") return true;
+    if (s == "<=") return true;
+    if (s == ">=") return true;
+    if (s == "AND") return true;
+    if (s == "OR") return true;
+    if (s == "STO") return true;
+    return false;
+}
+

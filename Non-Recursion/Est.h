@@ -1,37 +1,24 @@
 //
-// Created by 黎袁昊 on 2020/10/29.
+// Created by 黎袁昊 on 2020/11/7.
 //
 
 #ifndef PROJECT_EST_H
 #define PROJECT_EST_H
-
 #include <iostream>
 #include <string>
-#include <unordered_map>
-#include <functional>
-#include <optional>
-#include <variant>
-#include "SymbolTable.h"
+#include "Pile.h"
+#include "Operateur.h"
 
-// 判断是哪个符号
-std::optional<std::variant<double, std::function<double(double)>, std::function<double(double, double)>>>
-estQuelSymbol(std::string symbol, std::string str);
+static Pile &lirAff = Pile::getInstance();
 
-// 判断是哪个函数
-std::variant<double, std::function<double(double)>, std::function<double(double, double)>>
-estQuelFunction(std::string symbol, std::string str);
+void estProgramme(const std::string &s);
 
-// 判断是哪个常量
-double estQuelConst(std::string symbol);
+void estExpression(const std::string &s);
 
-// 判断是否为一元操作符
-bool estUnOperateurUnaire(const std::string &s);
+void estFraction(const std::string &s);
 
-// 判断是否为二元操作符
-bool estUnOperateurBinaire(const std::string &s);
+void estRationnelle(const std::string &s);
 
-// 判断是哪个类型
-std::string estQuelType(const std::string &s);
-
+void estEntiere(const std::string &s);
 
 #endif //PROJECT_EST_H

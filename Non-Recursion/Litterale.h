@@ -1,14 +1,14 @@
-#ifndef PROJECT_SYMBOLTABLE_H
-#define PROJECT_SYMBOLTABLE_H
+#ifndef PROJECT_LITTERALE_H
+#define PROJECT_LITTERALE_H
 
 #include <iostream>
 #include <string>
 #include <list>
 #include <sstream>
-#include "ComputerException.h"
 #include <algorithm>
 #include <cmath>
 #include <utility>
+#include "SymbolTable.h"
 
 class Litterale {
 public:
@@ -16,7 +16,7 @@ public:
     virtual std::string toString() = 0;
 
     // 转换为浮点数
-    virtual double toDouble() const = 0;
+    virtual double toDouble() const { return 0;};
 
     // 虚析构函数
     virtual ~Litterale() = default;
@@ -69,17 +69,19 @@ public:
     // 构造函数
     LitteraleProgramme() = default;
 
+    explicit LitteraleProgramme(std::string programme);
+
     // 转换为字符串
     std::string toString() override;
 
+    // 获得第一个元素
+    Litterale * getFirstElement();
+
+    // 获得数组大小
+    unsigned int getLength();
+
     // 加入数组最后
     void elementsPushBack(Litterale *);
-
-    // 删除数组最后
-    void elementsPopBack();
-
-    // 删除数组某个元素
-    void elementsSupprimer(Litterale *);
 
 };
 
@@ -97,8 +99,6 @@ private:
     friend LitteraleNumerique *toRationnelle(double);
 
 public:
-    // 获取整数
-    int getEntiere() const { return entiere; }
 
     // 转换为字符串
     std::string toString() override { return std::to_string(entiere); }
@@ -129,15 +129,6 @@ public:
 
     // 获取Fraction指针 唯一能创建对象函数
     friend LitteraleNumerique *getFraction(int n, int d);
-
-    // 获取数值
-    double getValue() const { return numerateur * (1.0) / denominateur; }
-
-    // 获取分子
-    int getNumerateur() const { return numerateur; }
-
-    // 获取分母
-    int getDenominateur() const { return denominateur; }
 
     // 分数简化
     void simplification();
@@ -170,4 +161,15 @@ LitteraleNumerique *getFraction(int n, int d);
 
 LitteraleNumerique *toRationnelle(double);
 
-#endif //PROJECT_SYMBOLTABLE_H
+Litterale *toLitterale(const std::string &s);
+
+std::string estQuelType(const std::string &s);
+
+bool estUnOperateurNotParameter(const std::string &s);
+
+bool estUnOperateurUnaire(const std::string &s);
+
+bool estUnOperateurBinaire(const std::string &s);
+
+
+#endif //PROJECT_LITTERALE_H
