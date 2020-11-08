@@ -1,16 +1,16 @@
 //
-// Created by 黎袁昊 on 2020/11/7.
+// Created on 2020/11/7.
 //
 #include "Est.h"
 
 void estProgramme(const std::string &s) {
     lirAff.push(toLitterale(s));
-    lirAff.setMessage("添加Programme类型"); //todo
+    lirAff.setMessage("Ajouter des donnees de type de Programme"); 
 }
 
 void estExpression(const std::string &s) {
     lirAff.push(toLitterale(s));
-    lirAff.setMessage("添加Expression类型"); //todo
+    lirAff.setMessage("Ajouter des donnees de type de Expression");
 }
 
 void estFraction(const std::string &s) {
@@ -21,19 +21,19 @@ void estFraction(const std::string &s) {
     std::string t2 = s.substr(0, pos);
     int numerateur = std::stoi(t2);
     lirAff.push(getFraction(numerateur, denominateur));
-    lirAff.setMessage("添加Fraction类型"); //todo
+    lirAff.setMessage("Ajouter des donnees de type de Fraction"); 
 }
 
 void estRationnelle(const std::string &s) {
     auto temp = std::stod(s);
     lirAff.push(toRationnelle(temp));
-    lirAff.setMessage("添加Rationnelle类型"); //todo
+    lirAff.setMessage("Ajouter des donnees de type de Rationnelle"); 
 }
 
 void estEntiere(const std::string &s) {
     auto temp = std::stod(s);
     lirAff.push(toRationnelle(temp));
-    lirAff.setMessage("添加Entiere类型"); //todo
+    lirAff.setMessage("Ajouter des donnees de type de Entiere"); 
 }
 
 

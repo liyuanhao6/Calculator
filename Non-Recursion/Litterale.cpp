@@ -178,7 +178,7 @@ std::string estQuelType(const std::string &s) {
     else if (s.find('/') != std::string::npos) return "Fraction";
     else if (s.find('.') != std::string::npos) return "Rationnelle";
     else if ((std::stod(s) - int(std::stod(s))) == 0) return "Entiere";
-    else throw ("输入错误");
+    else throw ("erreur de saisie");
 }
 
 bool estUnOperateurNotParameter(const std::string &s) {

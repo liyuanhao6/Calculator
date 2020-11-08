@@ -1,5 +1,5 @@
 //
-// Created by 黎袁昊 on 2020/11/7.
+// Created on 2020/11/7.
 //
 
 #ifndef PROJECT_SYMBOLTABLE_H

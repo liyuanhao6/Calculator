@@ -50,7 +50,7 @@ void Operator_Div::Action() {
     if (v1 == 0) {
         lirAff.push(toRationnelle(v2));
         lirAff.push(toRationnelle(v1));
-        lirAff.setMessage("除了0"); //todo
+        lirAff.setMessage("Division by zero");
     } else {
         double res = v2 / v1;
         Litterale *lirTemp = toRationnelle(res);
@@ -74,7 +74,7 @@ void Operator_DivExact::Action() {
     } else {
         lirAff.push(toRationnelle(v2));
         lirAff.push(toRationnelle(v1));
-        lirAff.setMessage("整除失败，非整数"); //todo
+        lirAff.setMessage(str2 + " ou " + str1 + "n'est pas une entiere");
     }
 }
 
@@ -93,7 +93,7 @@ void Operator_Mod::Action() {
     } else {
         lirAff.push(toRationnelle(v2));
         lirAff.push(toRationnelle(v1));
-        lirAff.setMessage("取余数失败，非整数"); //todo
+        lirAff.setMessage(str2 + " ou " + str1 + "n'est pas une entiere");
     }
 }
 
@@ -395,7 +395,7 @@ void Operator_Eval::Action() {
             else if (newType == "Entiere")
                 estEntiere(tempS);
             else
-                lirAff.setMessage("未知符号"); // todo
+                lirAff.setMessage("Symbole inconnu"); 
                 // Undo 指令
         }
     } else if (type == "Expression") {
@@ -418,12 +418,12 @@ void Operator_Eval::Action() {
 void Operator_Dup::Action() {
     Litterale *temp = lirAff.top();
     lirAff.push(temp);
-    lirAff.setMessage("DUP 存储一个新数据和栈中最后的一个相同"); // todo
+    lirAff.setMessage("DUP Conserve une nouvelle donnee identique a la derniere de la pile"); 
 }
 
 void Operator_Drop::Action() {
     lirAff.pop();
-    lirAff.setMessage("DROP 释放栈中最后一个数据"); // todo
+    lirAff.setMessage("DROP Libere les dernieres donnees de la pile"); 
 }
 
 void Operator_Swap::Action() {
@@ -433,12 +433,12 @@ void Operator_Swap::Action() {
     lirAff.pop();
     lirAff.push(temp1);
     lirAff.push(temp2);
-    lirAff.setMessage("SWAP 交换栈中最后两个元素"); // todo
+    lirAff.setMessage("SWAP Echange les deux derniers elements de la pile"); 
 }
 
 void Operator_Clear::Action() {
     lirAff.clear();
-    lirAff.setMessage("CLEAR 清空栈"); // todo
+    lirAff.setMessage("CLEAR Vide la pile"); 
 }
 
 void Operator_Ift::Action() {
@@ -455,13 +455,13 @@ void Operator_Ift::Action() {
             lirAff.push(tempLir1);
             Operator *tempOpt = toOperator("EVAL");
             tempOpt->Action();
-            lirAff.setMessage("IFT " + temp2Str + "为真 " + temp1Str + "进行计算"); // todo
+            lirAff.setMessage("IFT " + temp2Str + "est vrai " + temp1Str + "effectue des calculs"); 
         } else
-            lirAff.setMessage("IFT " + temp2Str + "为假 " + temp1Str + "抛弃"); // todo
+            lirAff.setMessage("IFT " + temp2Str + "est faux " + temp1Str + "abandonne"); 
     } else {
         lirAff.push(tempLir2);
         lirAff.push(tempLir1);
-        lirAff.setMessage("IFT " + temp2Str + "非逻辑运算符 恢复原位"); // todo
+        lirAff.setMessage("IFT " + temp2Str + "non operateur logique  revenir a l'etat initial");
     }
 }
 
@@ -471,14 +471,14 @@ void Operator_Sto::Action() {
     std::string str2 = lirAff.top()->toString();
     lirAff.pop();
     symbols.insert(str1.substr(1, str1.size() - 2), str2);
-    lirAff.setMessage("STO " + str1 + " 与 " + str2 + " 产生关联"); // todo
+    lirAff.setMessage("STO " + str1 + " et " + str2 + " sonts lies"); 
 }
 
 void Operator_Forget::Action() {
     std::string str = lirAff.top()->toString();
     lirAff.pop();
     symbols.remove(str.substr(1, str.size() - 2));
-    lirAff.setMessage("STO " + str + " 的关联删除"); // todo
+    lirAff.setMessage("STO " + str + " association est supprimee"); 
 }
 
 Operator *toOperator(const std::string &s) {
@@ -522,7 +522,7 @@ Operator *toOperator(const std::string &s) {
 //    else if (s == "WHILE") return "While";
     else if (s == "STO") return new Operator_Sto(s);
     else if (s == "FORGET") return new Operator_Forget(s);
-    else throw ("输入错误");
+    else throw ("Erreur de saisie");
 }
 
 
