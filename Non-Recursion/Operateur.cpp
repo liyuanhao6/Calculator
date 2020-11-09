@@ -30,7 +30,7 @@ void Operator_Div::Action() {
     if (v1 == 0) {
         lirAff.push(toNumerique(v2));
         lirAff.push(toNumerique(v1));
-        lirAff.setMessage("Division by zero");
+        throw std::logic_error("Division by zero");
     } else {
         double res = v2 / v1;
         Litterale *lirTemp = toNumerique(res);
@@ -49,7 +49,7 @@ void Operator_DivExact::Action() {
     } else {
         lirAff.push(toNumerique(v2));
         lirAff.push(toNumerique(v1));
-        lirAff.setMessage(str2 + " ou " + str1 + "n'est pas une entiere");
+        throw std::logic_error(str2 + " ou " + str1 + "n'est pas une entiere");
     }
 }
 
@@ -63,7 +63,7 @@ void Operator_Mod::Action() {
     } else {
         lirAff.push(toNumerique(v2));
         lirAff.push(toNumerique(v1));
-        lirAff.setMessage(str2 + " ou " + str1 + "n'est pas une entiere");
+        throw std::logic_error(str2 + " ou " + str1 + "n'est pas une entiere");
     }
 }
 
@@ -82,6 +82,9 @@ void Operator_Num::Action() {
         Litterale *lirTemp = toNumerique(v1);
         lirAff.push(lirTemp);
         lirAff.setMessage(" Num(" + str1 + ") = " + lirTemp->toString());
+    } else if (std::to_string(res).length() > 3) {
+        lirAff.push(toNumerique(v1));
+        throw std::logic_error("Ne peut pas agir sur la Rationnelle");
     } else {
         Litterale *lirTemp = toNumerique(res);
         lirAff.push(lirTemp);
@@ -96,6 +99,9 @@ void Operator_Den::Action() {
         Litterale *lirTemp = toNumerique(1);
         lirAff.push(lirTemp);
         lirAff.setMessage(" Den(" + str1 + ") = " + lirTemp->toString());
+    } else if (std::to_string(res).length() > 3) {
+        lirAff.push(toNumerique(v1));
+        throw std::logic_error("Ne peut pas agir sur la Rationnelle");
     } else {
         Litterale *lirTemp = toNumerique(res);
         lirAff.push(lirTemp);
@@ -104,7 +110,7 @@ void Operator_Den::Action() {
 }
 
 void Operator_Pow::Action() {
-    auto [v1, v2, str1, str2] = getTwoSetData();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     double res = pow(v2, v1);
     Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
@@ -161,10 +167,15 @@ void Operator_ArcTan::Action() {
 
 void Operator_Sqrt::Action() {
     auto[v1, str1] = getOneSetData();
-    double res = sqrt(v1);
-    Litterale *lirTemp = toNumerique(res);
-    lirAff.push(lirTemp);
-    lirAff.setMessage(" SQRT(" + str1 + ") = " + lirTemp->toString());
+    if (v1 < 0) {
+        lirAff.push(toNumerique(v1));
+        throw std::logic_error("Impossible de mettre au carre un nombre negatif");
+    } else {
+        double res = sqrt(v1);
+        Litterale *lirTemp = toNumerique(res);
+        lirAff.push(lirTemp);
+        lirAff.setMessage(" SQRT(" + str1 + ") = " + lirTemp->toString());
+    }
 }
 
 void Operator_Exp::Action() {
@@ -177,14 +188,20 @@ void Operator_Exp::Action() {
 
 void Operator_Ln::Action() {
     auto[v1, str1] = getOneSetData();
-    double res = log(v1) / log(exp(1));
-    Litterale *lirTemp = toNumerique(res);
-    lirAff.push(lirTemp);
-    lirAff.setMessage(" Ln(" + str1 + ") = " + lirTemp->toString());
+    if (v1 <= 0) {
+        lirAff.push(toNumerique(v1));
+        throw std::logic_error("Impossible de mettre au carre un nombre negatif");
+    }
+    else {
+        double res = log(v1) / log(exp(1));
+        Litterale *lirTemp = toNumerique(res);
+        lirAff.push(lirTemp);
+        lirAff.setMessage(" Ln(" + str1 + ") = " + lirTemp->toString());
+    }
 }
 
 void Operator_Equal::Action() {
-    auto [v1, v2, str1, str2] = getTwoSetData();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 == v1);
     Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
@@ -192,7 +209,7 @@ void Operator_Equal::Action() {
 }
 
 void Operator_NotEqual::Action() {
-    auto [v1, v2, str1, str2] = getTwoSetData();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 != v1);
     Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
@@ -200,7 +217,7 @@ void Operator_NotEqual::Action() {
 }
 
 void Operator_LE::Action() {
-    auto [v1, v2, str1, str2] = getTwoSetData();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 <= v1);
     Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
@@ -208,7 +225,7 @@ void Operator_LE::Action() {
 }
 
 void Operator_HE::Action() {
-    auto [v1, v2, str1, str2] = getTwoSetData();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 >= v1);
     Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
@@ -216,7 +233,7 @@ void Operator_HE::Action() {
 }
 
 void Operator_Lesser::Action() {
-    auto [v1, v2, str1, str2] = getTwoSetData();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 < v1);
     Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
@@ -224,7 +241,7 @@ void Operator_Lesser::Action() {
 }
 
 void Operator_Higher::Action() {
-    auto [v1, v2, str1, str2] = getTwoSetData();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 > v1);
     Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
@@ -240,7 +257,7 @@ void Operator_And::Action() {
 }
 
 void Operator_Or::Action() {
-    auto [v1, v2, str1, str2] = getTwoSetData();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 || v1);
     Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
@@ -280,13 +297,13 @@ void Operator_Eval::Action() {
                     Operator *opt = toOperator(tempS);
                     opt->Action();
                 } else
-                    lirAff.setMessage("Erreur : pas assez d'arguments");
+                    throw std::invalid_argument("Erreur : pas assez d'arguments");
             else if (newType == "OperateurBinaire")
                 if (this->lirAff.taille() >= 2) {
                     Operator *opt = toOperator(tempS);
                     opt->Action();
                 } else
-                    lirAff.setMessage("Erreur : pas assez d'arguments");
+                    throw std::invalid_argument("Erreur : pas assez d'arguments");
             else if (newType == "Fraction")
                 estFraction(tempS);
             else if (newType == "Rationnelle")
@@ -294,7 +311,7 @@ void Operator_Eval::Action() {
             else if (newType == "Entiere")
                 estEntiere(tempS);
             else
-                lirAff.setMessage("Symbole inconnu");
+                throw std::invalid_argument("Symbole inconnu");
             // Undo 指令
         }
     } else if (type == "Expression") {
@@ -312,7 +329,7 @@ void Operator_Eval::Action() {
             opt->Action();
         }
     } else
-        lirAff.setMessage("EVAL(" + tempStr + ") est mal");
+        throw std::invalid_argument("EVAL(" + tempStr + ") est mal");
 }
 
 void Operator_Dup::Action() {
@@ -361,7 +378,7 @@ void Operator_Ift::Action() {
     } else {
         lirAff.push(tempLir2);
         lirAff.push(tempLir1);
-        lirAff.setMessage("IFT " + temp2Str + "non operateur logique  revenir a l'etat initial");
+        throw std::invalid_argument("IFT " + temp2Str + "non operateur logique revenir a l'etat initial");
     }
 }
 
@@ -422,7 +439,7 @@ Operator *toOperator(const std::string &s) {
 //    else if (s == "WHILE") return "While";
     else if (s == "STO") return new Operator_Sto(s);
     else if (s == "FORGET") return new Operator_Forget(s);
-    else throw ("Erreur de saisie");
+    else throw std::logic_error("Erreur de saisie");
 }
 
 std::tuple<double, std::string> getOneSetData() {

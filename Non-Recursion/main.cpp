@@ -1,12 +1,11 @@
 #include "Controleur.h"
 
 int main() {
-    try {
-        Controleur& controleur = Controleur::getInstance();
-        controleur.executer();
-    } catch (...) {
-
-    }
-    return 0;
-
+    Controleur &controleur = Controleur::getInstance();
+    while (controleur.getState())
+        try {
+            controleur.executer();
+        } catch (std::exception &ex) {
+            controleur.setException(ex.what());
+        }
 }

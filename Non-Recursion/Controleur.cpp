@@ -17,8 +17,9 @@ void Controleur::executer() {
         lirAff.affiche();
         std::cout << "?-";
         std::getline(std::cin, s);
-        if (s != "Q") this->commande(s);
-    } while (s != "Q");
+        if (s == "Q") state = false;
+        else commande(s);
+    } while (state);
 }
 
 void Controleur::commande(const std::string &s) {
@@ -35,12 +36,12 @@ void Controleur::commande(const std::string &s) {
         if (lirAff.taille() >= 1)
             estOperateur(s);
         else
-            lirAff.setMessage("Erreur : pas assez d'arguments");
+            throw std::invalid_argument("pas assez d'arguments");
     else if (type == "OperateurBinaire")
         if (lirAff.taille() >= 2)
             estOperateur(s);
         else
-            lirAff.setMessage("Erreur : pas assez d'arguments");
+            throw std::invalid_argument("pas assez d'arguments");
     else if (type == "Fraction")
         estFraction(s);
     else if (type == "Rationnelle")
@@ -48,7 +49,7 @@ void Controleur::commande(const std::string &s) {
     else if (type == "Entiere")
         estEntiere(s);
     else
-        lirAff.setMessage("Erreur de format d'entree");
+        throw std::invalid_argument("Erreur de format d'entree");
 }
 
 void Controleur::estOperateur(const std::string &s) {
@@ -61,5 +62,13 @@ void Controleur::estOperateur(const std::string &s) {
         auto new_iter = OP.find(s);
         new_iter->second->Action();
     }
+}
+
+void Controleur::setException(const std::string &s) {
+    lirAff.setMessage(s);
+}
+
+bool Controleur::getState() const {
+    return state;
 }
 

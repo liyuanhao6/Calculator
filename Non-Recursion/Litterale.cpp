@@ -140,8 +140,8 @@ LitteraleNumerique *toNumerique(double num_double) {
     else {
         int n = num_double;
         int d = 1;
-        for (unsigned int i = 0; i < std::to_string(num_mantisse).length(); i++){
-            std::string temp(1,str_mantisse[i]);
+        for (unsigned int i = 0; i < std::to_string(num_mantisse).length(); i++) {
+            std::string temp(1, str_mantisse[i]);
             n = n * 10 + std::stoi(temp);
             d *= 10;
         }
@@ -177,8 +177,7 @@ Litterale *toLitterale(const std::string &s) {
     } else if (type == "Entiere") {
         auto num = std::stod(s);
         return toNumerique(num);
-    } else
-        return toLitterale(s);
+    } else throw std::invalid_argument("erreur de saisie");
 }
 
 std::string estQuelType(const std::string &s) {
@@ -190,8 +189,12 @@ std::string estQuelType(const std::string &s) {
     else if (estUnOperateurBinaire(s)) return "OperateurBinaire";
     else if (s.find('/') != std::string::npos) return "Fraction";
     else if (s.find('.') != std::string::npos) return "Rationnelle";
-    else if ((std::stod(s) - int(std::stod(s))) == 0) return "Entiere";
-    else throw ("erreur de saisie");
+    else if (std::to_string(std::stod(s)).length() == s.length()) {
+        if ((std::stod(s) - int(std::stod(s))) == 0)
+            return "Entiere";
+    }
+    else throw std::invalid_argument("erreur de saisie");
+
 }
 
 bool estUnOperateurNotParameter(const std::string &s) {

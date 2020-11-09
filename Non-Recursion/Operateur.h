@@ -8,6 +8,7 @@
 #include <vector>
 #include <tuple>
 #include "SymbolTable.h"
+#include <stdexcept>
 
 class Operator {
 private:
@@ -30,18 +31,18 @@ public:
 
     explicit Operator(std::string m) : mes(std::move(m)) {};
 
-    virtual const std::string &type_of_litterale() const = 0;
+    [[nodiscard]] virtual const std::string &type_of_litterale() const = 0;
 
     virtual void Action() = 0;
 
-    const std::string &getMes() const { return mes; }
+    [[nodiscard]] const std::string &getMes() const { return mes; }
 };
 
 class Operator_Plus : public Operator {
 public:
     explicit Operator_Plus(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -52,7 +53,7 @@ class Operator_Minus : public Operator {
 public:
     explicit Operator_Minus(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -63,7 +64,7 @@ class Operator_Multi : public Operator {
 public:
     explicit Operator_Multi(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -74,7 +75,7 @@ class Operator_Div : public Operator {
 public:
     explicit Operator_Div(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -85,7 +86,7 @@ class Operator_DivExact : public Operator {
 public:
     explicit Operator_DivExact(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -96,18 +97,18 @@ class Operator_Mod : public Operator {
 public:
     explicit Operator_Mod(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
-    virtual ~Operator_Mod() {}
+    virtual ~Operator_Mod() = default;
 };
 
 class Operator_Neg : public Operator {
 public:
     explicit Operator_Neg(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -118,7 +119,7 @@ class Operator_Num : public Operator {
 public:
     explicit Operator_Num(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -129,7 +130,7 @@ class Operator_Den : public Operator {
 public:
     explicit Operator_Den(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -140,7 +141,7 @@ class Operator_Pow : public Operator {
 public:
     explicit Operator_Pow(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -149,9 +150,9 @@ public:
 
 class Operator_Sin : public Operator {
 public:
-    Operator_Sin(const std::string &m) : Operator(m) {}
+    explicit Operator_Sin(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -160,9 +161,9 @@ public:
 
 class Operator_Cos : public Operator {
 public:
-    Operator_Cos(const std::string &m) : Operator(m) {}
+    explicit Operator_Cos(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -171,9 +172,9 @@ public:
 
 class Operator_Tan : public Operator {
 public:
-    Operator_Tan(const std::string &m) : Operator(m) {}
+    explicit Operator_Tan(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -182,9 +183,9 @@ public:
 
 class Operator_ArcSin : public Operator {
 public:
-    Operator_ArcSin(const std::string &m) : Operator(m) {}
+    explicit Operator_ArcSin(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -193,9 +194,9 @@ public:
 
 class Operator_ArcCos : public Operator {
 public:
-    Operator_ArcCos(const std::string &m) : Operator(m) {}
+    explicit Operator_ArcCos(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -204,9 +205,9 @@ public:
 
 class Operator_ArcTan : public Operator {
 public:
-    Operator_ArcTan(const std::string &m) : Operator(m) {}
+    explicit Operator_ArcTan(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -215,9 +216,9 @@ public:
 
 class Operator_Sqrt : public Operator {
 public:
-    Operator_Sqrt(const std::string &m) : Operator(m) {}
+    explicit Operator_Sqrt(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -226,9 +227,9 @@ public:
 
 class Operator_Exp : public Operator {
 public:
-    Operator_Exp(const std::string &m) : Operator(m) {}
+    explicit Operator_Exp(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -237,9 +238,9 @@ public:
 
 class Operator_Ln : public Operator {
 public:
-    Operator_Ln(const std::string &m) : Operator(m) {}
+    explicit Operator_Ln(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -251,7 +252,7 @@ class Operator_Equal : public Operator {
 public:
     explicit Operator_Equal(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -262,7 +263,7 @@ class Operator_NotEqual : public Operator {
 public:
     explicit Operator_NotEqual(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -273,7 +274,7 @@ class Operator_LE : public Operator {
 public:
     explicit Operator_LE(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -284,7 +285,7 @@ class Operator_HE : public Operator {
 public:
     explicit Operator_HE(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -295,7 +296,7 @@ class Operator_Lesser : public Operator {
 public:
     explicit Operator_Lesser(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -306,7 +307,7 @@ class Operator_Higher : public Operator {
 public:
     explicit Operator_Higher(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -318,7 +319,7 @@ class Operator_And : public Operator {
 public:
     explicit Operator_And(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -329,7 +330,7 @@ class Operator_Or : public Operator {
 public:
     explicit Operator_Or(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -340,7 +341,7 @@ class Operator_Not : public Operator {
 public:
     explicit Operator_Not(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -351,7 +352,7 @@ class Operator_Eval : public Operator {
 public:
     explicit Operator_Eval(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -362,7 +363,7 @@ class Operator_Dup : public Operator {
 public:
     explicit Operator_Dup(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -373,7 +374,7 @@ class Operator_Drop : public Operator {
 public:
     explicit Operator_Drop(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -384,7 +385,7 @@ class Operator_Swap : public Operator {
 public:
     explicit Operator_Swap(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -395,7 +396,7 @@ class Operator_Clear : public Operator {
 public:
     explicit Operator_Clear(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -406,7 +407,7 @@ class Operator_Ift : public Operator {
 public:
     explicit Operator_Ift(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -417,7 +418,7 @@ class Operator_Sto : public Operator {
 public:
     explicit Operator_Sto(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 
@@ -428,7 +429,7 @@ class Operator_Forget : public Operator {
 public:
     explicit Operator_Forget(const std::string &m) : Operator(m) {}
 
-    const std::string &type_of_litterale() const override { return getMes(); }
+    [[nodiscard]] const std::string &type_of_litterale() const override { return getMes(); }
 
     void Action() override;
 

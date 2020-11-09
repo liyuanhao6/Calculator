@@ -8,12 +8,14 @@
 #include "SymbolTable.h"
 #include "Operateur.h"
 #include "Est.h"
+#include <stdexcept>
 
 class Controleur {
 private:
     Pile &lirAff = Pile::getInstance();
     static Controleur *instance;
     std::map<std::string, Operator *> OP;
+    bool state = true;
 
     Controleur() = default;
 
@@ -31,6 +33,10 @@ public:
     void executer();
 
     void commande(const std::string &s);
+
+    void setException(const std::string &s);
+
+    [[nodiscard]] bool getState() const;
 };
 
 #endif //PROJECT_CONTROLEUR_H
