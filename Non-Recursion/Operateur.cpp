@@ -2,356 +2,255 @@
 #include "Operateur.h"
 
 void Operator_Plus::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     double res = v2 + v1;
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(str2 + " + " + str1 + " = " + lirTemp->toString());
 }
 
 void Operator_Minus::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     double res = v2 - v1;
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(str2 + " - " + str1 + " = " + lirTemp->toString());
 }
 
 void Operator_Multi::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     double res = v2 * v1;
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(str2 + " * " + str1 + " = " + lirTemp->toString());
 }
 
 void Operator_Div::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     if (v1 == 0) {
-        lirAff.push(toRationnelle(v2));
-        lirAff.push(toRationnelle(v1));
+        lirAff.push(toNumerique(v2));
+        lirAff.push(toNumerique(v1));
         lirAff.setMessage("Division by zero");
     } else {
         double res = v2 / v1;
-        Litterale *lirTemp = toRationnelle(res);
+        Litterale *lirTemp = toNumerique(res);
         lirAff.push(lirTemp);
         lirAff.setMessage(str2 + " / " + str1 + " = " + lirTemp->toString());
     }
 }
 
 void Operator_DivExact::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     if ((v1 - int(v1) == 0) && (v2 - int(v2) == 0)) {
         double res = int(v2) / int(v1);
-        Litterale *lirTemp = toRationnelle(res);
+        Litterale *lirTemp = toNumerique(res);
         lirAff.push(lirTemp);
         lirAff.setMessage(str2 + " DIV " + str1 + " = " + lirTemp->toString());
     } else {
-        lirAff.push(toRationnelle(v2));
-        lirAff.push(toRationnelle(v1));
+        lirAff.push(toNumerique(v2));
+        lirAff.push(toNumerique(v1));
         lirAff.setMessage(str2 + " ou " + str1 + "n'est pas une entiere");
     }
 }
 
 void Operator_Mod::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     if ((v1 - int(v1) == 0) && (v2 - int(v2) == 0)) {
         double res = int(v2) % int(v1);
-        Litterale *lirTemp = toRationnelle(res);
+        Litterale *lirTemp = toNumerique(res);
         lirAff.push(lirTemp);
         lirAff.setMessage(str2 + " MOD " + str1 + " = " + lirTemp->toString());
     } else {
-        lirAff.push(toRationnelle(v2));
-        lirAff.push(toRationnelle(v1));
+        lirAff.push(toNumerique(v2));
+        lirAff.push(toNumerique(v1));
         lirAff.setMessage(str2 + " ou " + str1 + "n'est pas une entiere");
     }
 }
 
 void Operator_Neg::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     double res = (-v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(" Neg(" + str1 + ") = " + lirTemp->toString());
 }
 
 void Operator_Num::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     double res = v1 - int(v1);
     if (res == 0) {
-        Litterale *lirTemp = toRationnelle(v1);
+        Litterale *lirTemp = toNumerique(v1);
         lirAff.push(lirTemp);
         lirAff.setMessage(" Num(" + str1 + ") = " + lirTemp->toString());
     } else {
-        Litterale *lirTemp = toRationnelle(res);
+        Litterale *lirTemp = toNumerique(res);
         lirAff.push(lirTemp);
         lirAff.setMessage(" Num(" + str1 + ") = " + lirTemp->toString());
     }
 }
 
 void Operator_Den::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     double res = v1 - int(v1);
     if (res == 0) {
-        Litterale *lirTemp = toRationnelle(1);
+        Litterale *lirTemp = toNumerique(1);
         lirAff.push(lirTemp);
         lirAff.setMessage(" Den(" + str1 + ") = " + lirTemp->toString());
     } else {
-        Litterale *lirTemp = toRationnelle(res);
+        Litterale *lirTemp = toNumerique(res);
         lirAff.push(lirTemp);
         lirAff.setMessage(" Den(" + str1 + ") = " + lirTemp->toString());
     }
 }
 
 void Operator_Pow::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto [v1, v2, str1, str2] = getTwoSetData();
     double res = pow(v2, v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(str2 + "^" + str1 + " = " + lirTemp->toString());
 }
 
 void Operator_Sin::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     double res = sin(v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(" SIN(" + str1 + ") = " + lirTemp->toString());
 }
 
 void Operator_Cos::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     double res = cos(v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(" COS(" + str1 + ") = " + lirTemp->toString());
 }
 
 void Operator_Tan::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     double res = tan(v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(" TAN(" + str1 + ") = " + lirTemp->toString());
 }
 
 void Operator_ArcSin::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     double res = asin(v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(" ARCSIN(" + str1 + ") = " + lirTemp->toString());
 }
 
 void Operator_ArcCos::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     double res = acos(v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(" ARCCOS(" + str1 + ") = " + lirTemp->toString());
 }
 
 void Operator_ArcTan::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     double res = atan(v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(" ARCTAN(" + str1 + ") = " + lirTemp->toString());
 }
 
 void Operator_Sqrt::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     double res = sqrt(v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(" SQRT(" + str1 + ") = " + lirTemp->toString());
 }
 
 void Operator_Exp::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     double res = exp(v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(" Exp(" + str1 + ") = " + lirTemp->toString());
 }
 
 void Operator_Ln::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     double res = log(v1) / log(exp(1));
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(" Ln(" + str1 + ") = " + lirTemp->toString());
 }
 
 void Operator_Equal::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto [v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 == v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(str2 + " == " + str1 + " = " + lirTemp->toString());
 }
 
 void Operator_NotEqual::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto [v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 != v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(str2 + " != " + str1 + " = " + lirTemp->toString());
 }
 
 void Operator_LE::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto [v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 <= v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(str2 + " <= " + str1 + " = " + lirTemp->toString());
 }
 
 void Operator_HE::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto [v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 >= v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(str2 + " >= " + str1 + " = " + lirTemp->toString());
 }
 
 void Operator_Lesser::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto [v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 < v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(str2 + " < " + str1 + " = " + lirTemp->toString());
 }
 
 void Operator_Higher::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto [v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 > v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(str2 + " > " + str1 + " = " + lirTemp->toString());
 }
 
 void Operator_And::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 && v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(str2 + " & " + str1 + " = " + lirTemp->toString());
 }
 
 void Operator_Or::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
-    double v2 = lirAff.top()->toDouble();
-    std::string str2 = lirAff.top()->toString();
-    lirAff.pop();
+    auto [v1, v2, str1, str2] = getTwoSetData();
     bool res = (v2 || v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage(str2 + " | " + str1 + " = " + lirTemp->toString());
 }
 
 void Operator_Not::Action() {
-    double v1 = lirAff.top()->toDouble();
-    std::string str1 = lirAff.top()->toString();
-    lirAff.pop();
+    auto[v1, str1] = getOneSetData();
     bool res = (!v1);
-    Litterale *lirTemp = toRationnelle(res);
+    Litterale *lirTemp = toNumerique(res);
     lirAff.push(lirTemp);
     lirAff.setMessage("!" + str1 + " = " + lirTemp->toString());
 }
@@ -395,8 +294,8 @@ void Operator_Eval::Action() {
             else if (newType == "Entiere")
                 estEntiere(tempS);
             else
-                lirAff.setMessage("Symbole inconnu"); 
-                // Undo 指令
+                lirAff.setMessage("Symbole inconnu");
+            // Undo 指令
         }
     } else if (type == "Expression") {
         auto temp = getSymbol(tempStr.substr(1, tempStr.size() - 2));
@@ -412,18 +311,19 @@ void Operator_Eval::Action() {
             Operator *opt = toOperator("EVAL");
             opt->Action();
         }
-    }
+    } else
+        lirAff.setMessage("EVAL(" + tempStr + ") est mal");
 }
 
 void Operator_Dup::Action() {
     Litterale *temp = lirAff.top();
     lirAff.push(temp);
-    lirAff.setMessage("DUP Conserve une nouvelle donnee identique a la derniere de la pile"); 
+    lirAff.setMessage("DUP Conserve une nouvelle donnee identique a la derniere de la pile");
 }
 
 void Operator_Drop::Action() {
     lirAff.pop();
-    lirAff.setMessage("DROP Libere les dernieres donnees de la pile"); 
+    lirAff.setMessage("DROP Libere les dernieres donnees de la pile");
 }
 
 void Operator_Swap::Action() {
@@ -433,12 +333,12 @@ void Operator_Swap::Action() {
     lirAff.pop();
     lirAff.push(temp1);
     lirAff.push(temp2);
-    lirAff.setMessage("SWAP Echange les deux derniers elements de la pile"); 
+    lirAff.setMessage("SWAP Echange les deux derniers elements de la pile");
 }
 
 void Operator_Clear::Action() {
     lirAff.clear();
-    lirAff.setMessage("CLEAR Vide la pile"); 
+    lirAff.setMessage("CLEAR Vide la pile");
 }
 
 void Operator_Ift::Action() {
@@ -455,9 +355,9 @@ void Operator_Ift::Action() {
             lirAff.push(tempLir1);
             Operator *tempOpt = toOperator("EVAL");
             tempOpt->Action();
-            lirAff.setMessage("IFT " + temp2Str + "est vrai " + temp1Str + "effectue des calculs"); 
+            lirAff.setMessage("IFT " + temp2Str + "est vrai " + temp1Str + "effectue des calculs");
         } else
-            lirAff.setMessage("IFT " + temp2Str + "est faux " + temp1Str + "abandonne"); 
+            lirAff.setMessage("IFT " + temp2Str + "est faux " + temp1Str + "abandonne");
     } else {
         lirAff.push(tempLir2);
         lirAff.push(tempLir1);
@@ -471,14 +371,14 @@ void Operator_Sto::Action() {
     std::string str2 = lirAff.top()->toString();
     lirAff.pop();
     symbols.insert(str1.substr(1, str1.size() - 2), str2);
-    lirAff.setMessage("STO " + str1 + " et " + str2 + " sonts lies"); 
+    lirAff.setMessage("STO " + str1 + " et " + str2 + " sonts lies");
 }
 
 void Operator_Forget::Action() {
     std::string str = lirAff.top()->toString();
     lirAff.pop();
     symbols.remove(str.substr(1, str.size() - 2));
-    lirAff.setMessage("STO " + str + " association est supprimee"); 
+    lirAff.setMessage("STO " + str + " association est supprimee");
 }
 
 Operator *toOperator(const std::string &s) {
@@ -525,4 +425,19 @@ Operator *toOperator(const std::string &s) {
     else throw ("Erreur de saisie");
 }
 
+std::tuple<double, std::string> getOneSetData() {
+    double v1 = lirAff.top()->toDouble();
+    std::string str1 = lirAff.top()->toString();
+    lirAff.pop();
+    return {v1, str1};
+}
 
+std::tuple<double, double, std::string, std::string> getTwoSetData() {
+    double v1 = lirAff.top()->toDouble();
+    std::string str1 = lirAff.top()->toString();
+    lirAff.pop();
+    double v2 = lirAff.top()->toDouble();
+    std::string str2 = lirAff.top()->toString();
+    lirAff.pop();
+    return {v1, v2, str1, str2};
+}

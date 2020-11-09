@@ -21,7 +21,7 @@ void SymbolTable::remove(const std::string &a) {
         symbolTable.erase(iter);
 }
 
-const std::string getSymbol(const std::string &a, SymbolTable &s) {
+std::string getSymbol(const std::string &a, SymbolTable &s) {
     auto iter = s.symbolTable.find(a);
     return iter->second;
 }

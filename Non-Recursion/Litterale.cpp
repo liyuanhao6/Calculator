@@ -116,8 +116,8 @@ double LitteraleRationnelle::toDouble() const {
     return this->partie_entiere + this->partie_decimale * pow(10, -size_decimale);
 }
 
-/*toRationnelle*/
-LitteraleNumerique *toRationnelle(double num_double) {
+/*toNumerique*/
+LitteraleNumerique *toNumerique(double num_double) {
     if (num_double == static_cast<int>(num_double))
         return new LitteraleEntiere(static_cast<int>(num_double));
     bool sign = true;
@@ -134,7 +134,20 @@ LitteraleNumerique *toRationnelle(double num_double) {
     if (!sign) {
         num_partie_entiere = -num_partie_entiere;
     }
-    return LitteraleRationnelle(num_partie_entiere, num_mantisse).simplifier();
+    std::string str_mantisse = std::to_string(num_mantisse);
+    if (str_mantisse.length() > 3)
+        return LitteraleRationnelle(num_partie_entiere, num_mantisse).simplifier();
+    else {
+        int n = num_double;
+        int d = 1;
+        for (unsigned int i = 0; i < std::to_string(num_mantisse).length(); i++){
+            std::string temp(1,str_mantisse[i]);
+            n = n * 10 + std::stoi(temp);
+            d *= 10;
+        }
+        return LitteraleFraction(n, d).simplifier();
+    }
+
 
 }
 
@@ -160,10 +173,10 @@ Litterale *toLitterale(const std::string &s) {
         return getFraction(numerateur, denominateur);
     } else if (type == "Rationnelle") {
         auto num = std::stod(s);
-        return toRationnelle(num);
+        return toNumerique(num);
     } else if (type == "Entiere") {
         auto num = std::stod(s);
-        return toRationnelle(num);
+        return toNumerique(num);
     } else
         return toLitterale(s);
 }

@@ -16,7 +16,7 @@ public:
     virtual std::string toString() = 0;
 
     // 转换为浮点数
-    virtual double toDouble() const { return 0;};
+    [[nodiscard]] virtual double toDouble() const { return 0; };
 
     // 虚析构函数
     virtual ~Litterale() = default;
@@ -32,7 +32,7 @@ public:
     virtual LitteraleNumerique *simplifier() = 0;
 
     // 提供浮点数
-    double toDouble() const override = 0;
+    [[nodiscard]] double toDouble() const override = 0;
 };
 
 class LitteraleAtome : public Litterale {
@@ -75,7 +75,7 @@ public:
     std::string toString() override;
 
     // 获得第一个元素
-    Litterale * getFirstElement();
+    Litterale *getFirstElement();
 
     // 获得数组大小
     unsigned int getLength();
@@ -96,7 +96,7 @@ private:
     explicit LitteraleEntiere(int);
 
     // 唯一能创建对象的函数
-    friend LitteraleNumerique *toRationnelle(double);
+    friend LitteraleNumerique *toNumerique(double);
 
 public:
 
@@ -107,7 +107,7 @@ public:
     LitteraleNumerique *simplifier() override;
 
     // 转换成浮点数
-    double toDouble() const override;
+    [[nodiscard]] double toDouble() const override;
 };
 
 class LitteraleFraction : public LitteraleNumerique {
@@ -117,6 +117,12 @@ private:
     // 私有构造器
     LitteraleFraction(int n, int d);
 
+    // 能创建对象的函数
+    friend LitteraleNumerique *toNumerique(double);
+
+    // 能创建对象的函数
+    friend LitteraleNumerique *getFraction(int, int);
+
 public:
     // 转换为字符串
     std::string toString() override { return std::to_string(numerateur) + "/" + std::to_string(denominateur); }
@@ -125,10 +131,7 @@ public:
     LitteraleNumerique *simplifier() override;
 
     // 转换成浮点数
-    double toDouble() const override;
-
-    // 获取Fraction指针 唯一能创建对象函数
-    friend LitteraleNumerique *getFraction(int n, int d);
+    [[nodiscard]] double toDouble() const override;
 
     // 分数简化
     void simplification();
@@ -142,7 +145,7 @@ private:
     LitteraleRationnelle(int e, int d) : partie_entiere(e), partie_decimale(d) {}
 
     // 唯一能创建对象函数
-    friend LitteraleNumerique *toRationnelle(double);
+    friend LitteraleNumerique *toNumerique(double);
 
 public:
     // 转换为字符串
@@ -152,14 +155,14 @@ public:
     LitteraleNumerique *simplifier() override;
 
     // 转换成浮点数
-    double toDouble() const override;
+    [[nodiscard]] double toDouble() const override;
 
 
 };
 
-LitteraleNumerique *getFraction(int n, int d);
+LitteraleNumerique *toNumerique(double);
 
-LitteraleNumerique *toRationnelle(double);
+LitteraleNumerique *getFraction(int, int);
 
 Litterale *toLitterale(const std::string &s);
 

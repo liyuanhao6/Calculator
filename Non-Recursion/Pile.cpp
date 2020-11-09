@@ -11,11 +11,6 @@ Pile &Pile::getInstance() {
     return *instance;
 }
 
-void Pile::destroyInstance() {
-    delete instance;
-    instance = nullptr;
-}
-
 void Pile::affiche() const {
     system("clear");
     std::cout << std::endl << "*********************************************" << std::endl;
@@ -37,8 +32,6 @@ void Pile::pop() {
     litterales.pop_back();
 }
 
-bool Pile::estVide() const { return litterales.empty(); }
-
 unsigned int Pile::taille() const { return litterales.size(); }
 
 Litterale *Pile::top() const { return litterales[taille() - 1]; }
@@ -46,7 +39,3 @@ Litterale *Pile::top() const { return litterales[taille() - 1]; }
 void Pile::clear() { litterales.clear(); }
 
 void Pile::setMessage(const std::string &m) { message = m; }
-
-std::string Pile::getMessage() const { return message; }
-
-void Pile::setNbItemsToAffiche(size_t n) { nbAffiche = n; }

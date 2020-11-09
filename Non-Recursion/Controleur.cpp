@@ -48,7 +48,7 @@ void Controleur::commande(const std::string &s) {
     else if (type == "Entiere")
         estEntiere(s);
     else
-        lirAff.setMessage("Erreur de format d'entree"); // todo
+        lirAff.setMessage("Erreur de format d'entree");
 }
 
 void Controleur::estOperateur(const std::string &s) {

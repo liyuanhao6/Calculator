@@ -4,10 +4,9 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include "Operateur.h"
-#include "Litterale.h"
 #include "Pile.h"
 #include "SymbolTable.h"
+#include "Operateur.h"
 #include "Est.h"
 
 class Controleur {

@@ -30,12 +30,12 @@ public:
 
     void remove(const std::string &a);
 
-    friend const std::string getSymbol(const std::string &a, SymbolTable &s);
+    friend std::string getSymbol(const std::string &a, SymbolTable &s);
 
     friend bool estExist(const std::string &a, SymbolTable &s);
 };
 
-const std::string getSymbol(const std::string &a, SymbolTable &s = SymbolTable::getInstance());
+std::string getSymbol(const std::string &a, SymbolTable &s = SymbolTable::getInstance());
 
 bool estExist(const std::string &a, SymbolTable &s = SymbolTable::getInstance());
 

@@ -7,7 +7,6 @@
 #include <iostream>
 #include <string>
 #include "Pile.h"
-#include "Operateur.h"
 
 static Pile &lirAff = Pile::getInstance();
 

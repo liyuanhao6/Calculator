@@ -30,28 +30,20 @@ public:
     // 获取OperateurFactory对象
     static Pile &getInstance();
 
-    // 删除OperateurFactory对象
-    static void destroyInstance();
-
     void affiche() const;
 
     void push(Litterale *l);
 
     void pop();
 
-    bool estVide() const;
+    [[nodiscard]] unsigned int taille() const;
 
-    unsigned int taille() const;
-
-    Litterale *top() const;
+    [[nodiscard]] Litterale *top() const;
 
     void clear();
 
     void setMessage(const std::string &m);
 
-    std::string getMessage() const;
-
-    void setNbItemsToAffiche(size_t n);
 };
 
 #endif //PROJECT_PILE_H

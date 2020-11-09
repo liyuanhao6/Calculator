@@ -26,13 +26,13 @@ void estFraction(const std::string &s) {
 
 void estRationnelle(const std::string &s) {
     auto temp = std::stod(s);
-    lirAff.push(toRationnelle(temp));
+    lirAff.push(toNumerique(temp));
     lirAff.setMessage("Ajouter des donnees de type de Rationnelle"); 
 }
 
 void estEntiere(const std::string &s) {
     auto temp = std::stod(s);
-    lirAff.push(toRationnelle(temp));
+    lirAff.push(toNumerique(temp));
     lirAff.setMessage("Ajouter des donnees de type de Entiere"); 
 }
 

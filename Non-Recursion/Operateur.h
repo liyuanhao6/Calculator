@@ -6,6 +6,7 @@
 #include "Pile.h"
 #include "Est.h"
 #include <vector>
+#include <tuple>
 #include "SymbolTable.h"
 
 class Operator {
@@ -435,5 +436,9 @@ public:
 };
 
 Operator *toOperator(const std::string &s);
+
+std::tuple<double, std::string> getOneSetData();
+
+std::tuple<double, double, std::string, std::string> getTwoSetData();
 
 #endif //PROJECT_OPERATEUR_H
