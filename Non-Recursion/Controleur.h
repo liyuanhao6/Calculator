@@ -3,12 +3,12 @@
 
 #include <iostream>
 #include <map>
-#include <vector>
-#include "Pile.h"
-#include "SymbolTable.h"
-#include "Operateur.h"
-#include "Est.h"
 #include <stdexcept>
+#include <vector>
+
+#include "Est.h"
+#include "Operateur.h"
+#include "Pile.h"
 
 class Controleur {
 private:
@@ -39,4 +39,4 @@ public:
     [[nodiscard]] bool getState() const;
 };
 
-#endif //PROJECT_CONTROLEUR_H
+#endif  // PROJECT_CONTROLEUR_H

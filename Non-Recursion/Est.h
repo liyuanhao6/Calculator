@@ -6,6 +6,7 @@
 #define PROJECT_EST_H
 #include <iostream>
 #include <string>
+
 #include "Pile.h"
 
 static Pile &lirAff = Pile::getInstance();
@@ -20,4 +21,4 @@ void estRationnelle(const std::string &s);
 
 void estEntiere(const std::string &s);
 
-#endif //PROJECT_EST_H
+#endif  // PROJECT_EST_H

@@ -2,13 +2,13 @@
 #define PROJECT_OPERATEUR_H
 
 #include <iostream>
+#include <stdexcept>
+#include <tuple>
+#include <vector>
+
+#include "Est.h"
 #include "Litterale.h"
 #include "Pile.h"
-#include "Est.h"
-#include <vector>
-#include <tuple>
-#include "SymbolTable.h"
-#include <stdexcept>
 
 class Operator {
 private:
@@ -27,9 +27,9 @@ private:
 public:
     Pile &lirAff = Pile::getInstance();
 
-    SymbolTable &symbols = SymbolTable::getInstance();
+    LitteraleSymbol &symbols = LitteraleSymbol::getInstance();
 
-    explicit Operator(std::string m) : mes(std::move(m)) {};
+    explicit Operator(std::string m) : mes(std::move(m)){};
 
     [[nodiscard]] virtual const std::string &type_of_litterale() const = 0;
 
@@ -247,7 +247,6 @@ public:
     virtual ~Operator_Ln() = default;
 };
 
-
 class Operator_Equal : public Operator {
 public:
     explicit Operator_Equal(const std::string &m) : Operator(m) {}
@@ -313,7 +312,6 @@ public:
 
     virtual ~Operator_Higher() = default;
 };
-
 
 class Operator_And : public Operator {
 public:
@@ -442,4 +440,6 @@ std::tuple<double, std::string> getOneSetData();
 
 std::tuple<double, double, std::string, std::string> getTwoSetData();
 
-#endif //PROJECT_OPERATEUR_H
+void fromExpressionToSymbol(const std::string &s);
+
+#endif  // PROJECT_OPERATEUR_H

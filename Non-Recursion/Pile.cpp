@@ -24,13 +24,9 @@ void Pile::affiche() const {
     std::cout << "---------------------------------------------" << std::endl;
 }
 
-void Pile::push(Litterale *l) {
-    litterales.push_back(l);
-}
+void Pile::push(Litterale *l) { litterales.push_back(l); }
 
-void Pile::pop() {
-    litterales.pop_back();
-}
+void Pile::pop() { litterales.pop_back(); }
 
 unsigned int Pile::taille() const { return litterales.size(); }
 

@@ -67,6 +67,36 @@ std::string LitteraleProgramme::toString() {
     return "[ " + str_all + " ]";
 }
 
+/*litteralsymbol operateur de map*/
+LitteraleSymbol *LitteraleSymbol::instance = nullptr;
+
+LitteraleSymbol &LitteraleSymbol::getInstance() {
+    if (instance == nullptr) instance = new LitteraleSymbol();
+    return *instance;
+}
+
+void LitteraleSymbol::insert(const std::string &a, const std::string &b) {
+    symbolTable.insert(std::map<std::string, std::string>::value_type(a, b));
+}
+
+void LitteraleSymbol::remove(const std::string &a) {
+    auto iter = symbolTable.find(a);
+    if (iter != symbolTable.end())
+        symbolTable.erase(iter);
+}
+
+std::string getSymbol(const std::string &a, LitteraleSymbol &LS) {
+    auto iter = LS.symbolTable.find(a);
+    return iter->second;
+}
+
+bool estExist(const std::string &a, LitteraleSymbol &LS) {
+    auto iter = LS.symbolTable.find(a);
+    return !(iter == LS.symbolTable.end());
+}
+
+
+
 /*litteralprogramme operateur de list*/
 LitteraleProgramme::LitteraleProgramme(std::string programme) {
     for (unsigned int i = 1; i < programme.size() && programme[i] != ']'; i++) {

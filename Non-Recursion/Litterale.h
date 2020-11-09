@@ -1,14 +1,14 @@
 #ifndef PROJECT_LITTERALE_H
 #define PROJECT_LITTERALE_H
 
-#include <iostream>
-#include <string>
-#include <list>
-#include <sstream>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
+#include <list>
+#include <map>
+#include <sstream>
+#include <string>
 #include <utility>
-#include "SymbolTable.h"
 
 class Litterale {
 public:
@@ -23,7 +23,6 @@ public:
 };
 
 class LitteraleNumerique : public Litterale {
-
 public:
     // 转换为字符串
     std::string toString() override = 0;
@@ -37,7 +36,7 @@ public:
 
 class LitteraleAtome : public Litterale {
 private:
-    std::string nom_atome; // atome
+    std::string nom_atome;  // atome
 
 public:
     // 获取字符串
@@ -45,12 +44,11 @@ public:
 
     // 构造函数
     explicit LitteraleAtome(std::string str_atome) : nom_atome(std::move(str_atome)) {}
-
 };
 
 class LitteraleExpression : public Litterale {
 private:
-    std::string nom_expression; // expression
+    std::string nom_expression;  // expression
 
 public:
     // 获取字符串
@@ -58,12 +56,42 @@ public:
 
     // 构造函数
     explicit LitteraleExpression(std::string expression) : nom_expression(std::move(expression)) {}
+};
 
+class LitteraleSymbol : public Litterale {
+private:
+    std::string nom_symbol;  // symbol
+
+    std::map<std::string, std::string> symbolTable;
+
+    static LitteraleSymbol *instance;
+
+    LitteraleSymbol() = default;
+
+    ~LitteraleSymbol() override = default;
+
+public:
+    // 获取字符串
+    std::string toString() override { return nom_symbol; }
+
+    LitteraleSymbol(const LitteraleSymbol &c) = delete;
+
+    LitteraleSymbol &operator=(const LitteraleSymbol &c) = delete;
+
+    static LitteraleSymbol &getInstance();
+
+    void insert(const std::string &a, const std::string &b);
+
+    void remove(const std::string &a);
+
+    friend std::string getSymbol(const std::string &a, LitteraleSymbol &LS);
+
+    friend bool estExist(const std::string &a, LitteraleSymbol &LS);
 };
 
 class LitteraleProgramme : public Litterale {
 private:
-    std::list<Litterale *> elements; // Litterale指针数组
+    std::list<Litterale *> elements;  // Litterale指针数组
 
 public:
     // 构造函数
@@ -82,16 +110,15 @@ public:
 
     // 加入数组最后
     void elementsPushBack(Litterale *);
-
 };
 
 class LitteraleEntiere : public LitteraleNumerique {
 private:
-    int entiere; // 整数
+    int entiere;  // 整数
 
-    friend class LitteraleFraction; // 有理数类
+    friend class LitteraleFraction;  // 有理数类
 
-    friend class LitteraleRationnelle; // 实数类
+    friend class LitteraleRationnelle;  // 实数类
     // 私有构造器
     explicit LitteraleEntiere(int);
 
@@ -99,7 +126,6 @@ private:
     friend LitteraleNumerique *toNumerique(double);
 
 public:
-
     // 转换为字符串
     std::string toString() override { return std::to_string(entiere); }
 
@@ -112,8 +138,8 @@ public:
 
 class LitteraleFraction : public LitteraleNumerique {
 private:
-    int numerateur; // 分子
-    int denominateur; // 分母
+    int numerateur;    // 分子
+    int denominateur;  // 分母
     // 私有构造器
     LitteraleFraction(int n, int d);
 
@@ -125,7 +151,9 @@ private:
 
 public:
     // 转换为字符串
-    std::string toString() override { return std::to_string(numerateur) + "/" + std::to_string(denominateur); }
+    std::string toString() override {
+        return std::to_string(numerateur) + "/" + std::to_string(denominateur);
+    }
 
     // 转换为Entiere 或 Rationnelle
     LitteraleNumerique *simplifier() override;
@@ -139,8 +167,8 @@ public:
 
 class LitteraleRationnelle : public LitteraleNumerique {
 private:
-    int partie_entiere; // 整数
-    int partie_decimale; // 小数
+    int partie_entiere;   // 整数
+    int partie_decimale;  // 小数
     // 私有构造器
     LitteraleRationnelle(int e, int d) : partie_entiere(e), partie_decimale(d) {}
 
@@ -156,8 +184,6 @@ public:
 
     // 转换成浮点数
     [[nodiscard]] double toDouble() const override;
-
-
 };
 
 LitteraleNumerique *toNumerique(double);
@@ -174,5 +200,8 @@ bool estUnOperateurUnaire(const std::string &s);
 
 bool estUnOperateurBinaire(const std::string &s);
 
+std::string getSymbol(const std::string &a, LitteraleSymbol &LS = LitteraleSymbol::getInstance());
 
-#endif //PROJECT_LITTERALE_H
+bool estExist(const std::string &a, LitteraleSymbol &LS = LitteraleSymbol::getInstance());
+
+#endif  // PROJECT_LITTERALE_H

@@ -5,7 +5,7 @@
 
 void estProgramme(const std::string &s) {
     lirAff.push(toLitterale(s));
-    lirAff.setMessage("Ajouter des donnees de type de Programme"); 
+    lirAff.setMessage("Ajouter des donnees de type de Programme");
 }
 
 void estExpression(const std::string &s) {
@@ -21,19 +21,17 @@ void estFraction(const std::string &s) {
     std::string t2 = s.substr(0, pos);
     int numerateur = std::stoi(t2);
     lirAff.push(getFraction(numerateur, denominateur));
-    lirAff.setMessage("Ajouter des donnees de type de Fraction"); 
+    lirAff.setMessage("Ajouter des donnees de type de Fraction");
 }
 
 void estRationnelle(const std::string &s) {
     auto temp = std::stod(s);
     lirAff.push(toNumerique(temp));
-    lirAff.setMessage("Ajouter des donnees de type de Rationnelle"); 
+    lirAff.setMessage("Ajouter des donnees de type de Rationnelle");
 }
 
 void estEntiere(const std::string &s) {
     auto temp = std::stod(s);
     lirAff.push(toNumerique(temp));
-    lirAff.setMessage("Ajouter des donnees de type de Entiere"); 
+    lirAff.setMessage("Ajouter des donnees de type de Entiere");
 }
-
-

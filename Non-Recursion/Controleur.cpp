@@ -17,8 +17,10 @@ void Controleur::executer() {
         lirAff.affiche();
         std::cout << "?-";
         std::getline(std::cin, s);
-        if (s == "Q") state = false;
-        else commande(s);
+        if (s == "Q")
+            state = false;
+        else
+            commande(s);
     } while (state);
 }
 
@@ -28,18 +30,12 @@ void Controleur::commande(const std::string &s) {
         estProgramme(s);
     else if (type == "Expression")
         estExpression(s);
-    else if (type == "Symbol"){
+    else if (type == "Symbol") {
         std::string temp = getSymbol(s);
         std::string newType = estQuelType(temp);
-        if (newType == "Programme"){
-            lirAff.push(toLitterale(temp));
-            estOperateur("EVAL");
-        }
-        else
-            lirAff.push(toLitterale(temp));
-    }
-
-    else if (type == "OperateurNotParameter")
+        lirAff.push(toLitterale(temp));
+        if (newType == "Programme") estOperateur("EVAL");
+    } else if (type == "OperateurNotParameter")
         estOperateur(s);
     else if (type == "OperateurUnaire")
         if (lirAff.taille() >= 1)
@@ -73,11 +69,6 @@ void Controleur::estOperateur(const std::string &s) {
     }
 }
 
-void Controleur::setException(const std::string &s) {
-    lirAff.setMessage(s);
-}
+void Controleur::setException(const std::string &s) { lirAff.setMessage(s); }
 
-bool Controleur::getState() const {
-    return state;
-}
-
+bool Controleur::getState() const { return state; }

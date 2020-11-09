@@ -5,15 +5,16 @@
 #ifndef PROJECT_PILE_H
 #define PROJECT_PILE_H
 
-#include "Litterale.h"
 #include <vector>
+
+#include "Litterale.h"
 
 class Pile {
 private:
     std::vector<Litterale *> litterales;
     unsigned int nbAffiche = 4;
     std::string message;
-    static Pile *instance; // 唯一LitteraleManager对象
+    static Pile *instance;  // 唯一LitteraleManager对象
     // 私有构造器
     Pile() = default;
 
@@ -43,7 +44,6 @@ public:
     void clear();
 
     void setMessage(const std::string &m);
-
 };
 
-#endif //PROJECT_PILE_H
+#endif  // PROJECT_PILE_H

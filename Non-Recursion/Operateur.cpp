@@ -285,8 +285,11 @@ void Operator_Eval::Action() {
             std::string newType = estQuelType(tempS);
             if (newType == "Programme")
                 estProgramme(tempS);
-            else if (newType == "Expression")
+            else if (newType == "Expression"){
                 estExpression(tempS);
+                Operator *opt = toOperator("EVAL");
+                opt->Action();
+            }
             else if (newType == "Symbol")
                 lirAff.push(toLitterale(getSymbol(tempS)));
             else if (newType == "OperateurNotParameter") {
@@ -316,18 +319,7 @@ void Operator_Eval::Action() {
         }
     } else if (type == "Expression") {
         auto temp = getSymbol(tempStr.substr(1, tempStr.size() - 2));
-        std::string newType = estQuelType(temp);
-        if (newType == "Fraction")
-            estFraction(temp);
-        else if (newType == "Rationnelle")
-            estRationnelle(temp);
-        else if (newType == "Entiere")
-            estEntiere(temp);
-        else if (newType == "Programme") {
-            lirAff.push(toLitterale(temp));
-            Operator *opt = toOperator("EVAL");
-            opt->Action();
-        }
+        fromExpressionToSymbol(tempStr);
         lirAff.setMessage("EVAL(" + tempStr + ") = " + temp);
     } else
         throw std::invalid_argument("EVAL(" + tempStr + ") est mal");
@@ -458,4 +450,14 @@ std::tuple<double, double, std::string, std::string> getTwoSetData() {
     std::string str2 = lirAff.top()->toString();
     lirAff.pop();
     return {v1, v2, str1, str2};
+}
+
+void fromExpressionToSymbol(const std::string &s) {
+    auto temp = getSymbol(s.substr(1, s.size() - 2));
+    std::string newType = estQuelType(temp);
+    lirAff.push(toLitterale(temp));
+    if (newType == "Programme") {
+        Operator *opt = toOperator("EVAL");
+        opt->Action();
+    }
 }
