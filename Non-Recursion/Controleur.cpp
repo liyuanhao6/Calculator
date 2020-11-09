@@ -28,8 +28,17 @@ void Controleur::commande(const std::string &s) {
         estProgramme(s);
     else if (type == "Expression")
         estExpression(s);
-    else if (type == "Symbol")
-        lirAff.push(toLitterale(getSymbol(s)));
+    else if (type == "Symbol"){
+        std::string temp = getSymbol(s);
+        std::string newType = estQuelType(temp);
+        if (newType == "Programme"){
+            lirAff.push(toLitterale(temp));
+            estOperateur("EVAL");
+        }
+        else
+            lirAff.push(toLitterale(temp));
+    }
+
     else if (type == "OperateurNotParameter")
         estOperateur(s);
     else if (type == "OperateurUnaire")

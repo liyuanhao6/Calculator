@@ -328,6 +328,7 @@ void Operator_Eval::Action() {
             Operator *opt = toOperator("EVAL");
             opt->Action();
         }
+        lirAff.setMessage("EVAL(" + tempStr + ") = " + temp);
     } else
         throw std::invalid_argument("EVAL(" + tempStr + ") est mal");
 }
@@ -372,13 +373,13 @@ void Operator_Ift::Action() {
             lirAff.push(tempLir1);
             Operator *tempOpt = toOperator("EVAL");
             tempOpt->Action();
-            lirAff.setMessage("IFT " + temp2Str + "est vrai " + temp1Str + "effectue des calculs");
+            lirAff.setMessage("IFT " + temp2Str + " est vrai " + temp1Str + " effectue des calculs");
         } else
-            lirAff.setMessage("IFT " + temp2Str + "est faux " + temp1Str + "abandonne");
+            lirAff.setMessage("IFT " + temp2Str + " est faux " + temp1Str + " abandonne");
     } else {
         lirAff.push(tempLir2);
         lirAff.push(tempLir1);
-        throw std::invalid_argument("IFT " + temp2Str + "non operateur logique revenir a l'etat initial");
+        throw std::invalid_argument("IFT " + temp2Str + " non operateur logique revenir a l'etat initial");
     }
 }
 

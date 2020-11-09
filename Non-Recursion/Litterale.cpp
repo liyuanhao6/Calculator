@@ -189,10 +189,7 @@ std::string estQuelType(const std::string &s) {
     else if (estUnOperateurBinaire(s)) return "OperateurBinaire";
     else if (s.find('/') != std::string::npos) return "Fraction";
     else if (s.find('.') != std::string::npos) return "Rationnelle";
-    else if (std::to_string(std::stod(s)).length() == s.length()) {
-        if ((std::stod(s) - int(std::stod(s))) == 0)
-            return "Entiere";
-    }
+    else if ((std::stod(s) - int(std::stod(s))) == 0) return "Entiere";
     else throw std::invalid_argument("erreur de saisie");
 
 }
