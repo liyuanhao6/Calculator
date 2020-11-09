@@ -1,9 +1,7 @@
 #include "Litterale.h"
 
 /*simplifier*/
-LitteraleNumerique *LitteraleEntiere::simplifier() {
-    return new LitteraleEntiere(this->entiere);
-}
+LitteraleNumerique *LitteraleEntiere::simplifier() { return new LitteraleEntiere(this->entiere); }
 
 LitteraleNumerique *LitteraleFraction::simplifier() {
     if (this->denominateur == 1) {
@@ -49,7 +47,6 @@ void LitteraleFraction::simplification() {
     }
 }
 
-
 /*tostring*/
 std::string LitteraleRationnelle::toString() {
     return std::to_string(this->partie_entiere) + "." + std::to_string(this->partie_decimale);
@@ -81,8 +78,7 @@ void LitteraleSymbol::insert(const std::string &a, const std::string &b) {
 
 void LitteraleSymbol::remove(const std::string &a) {
     auto iter = symbolTable.find(a);
-    if (iter != symbolTable.end())
-        symbolTable.erase(iter);
+    if (iter != symbolTable.end()) symbolTable.erase(iter);
 }
 
 std::string getSymbol(const std::string &a, LitteraleSymbol &LS) {
@@ -95,12 +91,11 @@ bool estExist(const std::string &a, LitteraleSymbol &LS) {
     return !(iter == LS.symbolTable.end());
 }
 
-
-
 /*litteralprogramme operateur de list*/
 LitteraleProgramme::LitteraleProgramme(std::string programme) {
     for (unsigned int i = 1; i < programme.size() && programme[i] != ']'; i++) {
-        if (programme[i] == ' ') continue;
+        if (programme[i] == ' ')
+            continue;
         else if (programme[i] == '[') {
             unsigned int j = 0;
             while (programme[i + j] != ']') j++;
@@ -128,9 +123,7 @@ void LitteraleProgramme::elementsPushBack(Litterale *newlitterale) {
 }
 
 /*toDouble*/
-double LitteraleEntiere::toDouble() const {
-    return static_cast<double>(this->entiere);
-}
+double LitteraleEntiere::toDouble() const { return static_cast<double>(this->entiere); }
 
 double LitteraleFraction::toDouble() const {
     return static_cast<double>(this->numerateur) / static_cast<double>(this->denominateur);
@@ -177,8 +170,6 @@ LitteraleNumerique *toNumerique(double num_double) {
         }
         return LitteraleFraction(n, d).simplifier();
     }
-
-
 }
 
 LitteraleNumerique *getFraction(int n, int d) { return new LitteraleFraction(n, d); }
@@ -191,7 +182,8 @@ Litterale *toLitterale(const std::string &s) {
         return new LitteraleExpression(s);
     else if (type == "Symbol") {
         return toLitterale(getSymbol(s));
-    } else if (type == "OperateurNotParameter" || type == "OperateurUnaire" || type == "OperateurBinaire")
+    } else if (type == "OperateurNotParameter" || type == "OperateurUnaire" ||
+               type == "OperateurBinaire")
         return new LitteraleAtome(s);
     else if (type == "Fraction") {
         unsigned int pos = s.find('/');
@@ -207,21 +199,31 @@ Litterale *toLitterale(const std::string &s) {
     } else if (type == "Entiere") {
         auto num = std::stod(s);
         return toNumerique(num);
-    } else throw std::invalid_argument("erreur de saisie");
+    } else
+        throw std::invalid_argument("erreur de saisie");
 }
 
 std::string estQuelType(const std::string &s) {
-    if (s.find('[') != std::string::npos) return "Programme";
-    else if (s.find('\"') != std::string::npos) return "Expression";
-    else if (estExist(s)) return "Symbol";
-    else if (estUnOperateurNotParameter(s))return "OperateurNotParameter";
-    else if (estUnOperateurUnaire(s)) return "OperateurUnaire";
-    else if (estUnOperateurBinaire(s)) return "OperateurBinaire";
-    else if (s.find('/') != std::string::npos) return "Fraction";
-    else if (s.find('.') != std::string::npos) return "Rationnelle";
-    else if ((std::stod(s) - int(std::stod(s))) == 0) return "Entiere";
-    else throw std::invalid_argument("erreur de saisie");
-
+    if (s.find('[') != std::string::npos)
+        return "Programme";
+    else if (s.find('\"') != std::string::npos)
+        return "Expression";
+    else if (estExist(s))
+        return "Symbol";
+    else if (estUnOperateurNotParameter(s))
+        return "OperateurNotParameter";
+    else if (estUnOperateurUnaire(s))
+        return "OperateurUnaire";
+    else if (estUnOperateurBinaire(s))
+        return "OperateurBinaire";
+    else if (s.find('/') != std::string::npos)
+        return "Fraction";
+    else if (s.find('.') != std::string::npos)
+        return "Rationnelle";
+    else if ((std::stod(s) - int(std::stod(s))) == 0)
+        return "Entiere";
+    else
+        throw std::invalid_argument("erreur de saisie");
 }
 
 bool estUnOperateurNotParameter(const std::string &s) {
@@ -275,4 +277,3 @@ bool estUnOperateurBinaire(const std::string &s) {
     if (s == "STO") return true;
     return false;
 }
-
