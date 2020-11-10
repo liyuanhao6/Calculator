@@ -12,30 +12,30 @@
 
 class Operator {
 private:
-    std::string mes;
+    std::string mes; // 运算符种类
 
-    friend void estProgramme(const std::string &s);
+    friend void estProgramme(const std::string &s); // 生成Programme类型数据并压栈
 
-    friend void estExpression(const std::string &s);
+    friend void estExpression(const std::string &s); // 生成Expression类型数据并压栈
 
-    friend void estFraction(const std::string &s);
+    friend void estFraction(const std::string &s); // 生成Fraction类型数据并压栈
 
-    friend void estRationnelle(const std::string &s);
+    friend void estRationnelle(const std::string &s); // 生成Rationnelle类型数据并压栈
 
-    friend void estEntiere(const std::string &s);
+    friend void estEntiere(const std::string &s); // 生成Entiere类型数据并压栈
 
 public:
-    Pile &lirAff = Pile::getInstance();
+    Pile &lirAff = Pile::getInstance(); // Pile类单一接口
 
-    LitteraleSymbol &symbols = LitteraleSymbol::getInstance();
+    LitteraleSymbol &symbols = LitteraleSymbol::getInstance(); // LitteraleSymbol类单一接口
 
-    explicit Operator(std::string m) : mes(std::move(m)){};
+    explicit Operator(std::string m) : mes(std::move(m)){}; // 构造函数
 
-    [[nodiscard]] virtual const std::string &type_of_litterale() const = 0;
+    [[nodiscard]] virtual const std::string &type_of_litterale() const = 0; // 调用getMes获取信息
 
-    virtual void Action() = 0;
+    virtual void Action() = 0; // 运算操作
 
-    [[nodiscard]] const std::string &getMes() const { return mes; }
+    [[nodiscard]] const std::string &getMes() const { return mes; } // 获取运算符种类信息
 };
 
 class Operator_Plus : public Operator {
@@ -434,12 +434,12 @@ public:
     virtual ~Operator_Forget() = default;
 };
 
-Operator *toOperator(const std::string &s);
+Operator *toOperator(const std::string &s); // 获取toOperator指针
 
-std::tuple<double, std::string> getOneSetData();
+std::tuple<double, std::string> getOneSetData(); // 获取一组数据 std::tuple<double, std::string>
 
-std::tuple<double, double, std::string, std::string> getTwoSetData();
+std::tuple<double, double, std::string, std::string> getTwoSetData(); // 获取两组数据 std::tuple<double, std::string>
 
-void fromExpressionToSymbol(const std::string &s);
+void fromExpressionToSymbol(const std::string &s); // 将Expression类型数据转换为Symbol类型数据
 
 #endif  // PROJECT_OPERATEUR_H

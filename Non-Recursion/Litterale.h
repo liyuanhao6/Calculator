@@ -12,81 +12,70 @@
 
 class Litterale {
 public:
-    // 转换为字符串
-    virtual std::string toString() = 0;
+    virtual std::string toString() = 0; // 获取字符串
 
-    // 转换为浮点数
-    [[nodiscard]] virtual double toDouble() const { return 0; };
+    [[nodiscard]] virtual double toDouble() const { return 0; }; // 获取浮点数
 
-    // 虚析构函数
-    virtual ~Litterale() = default;
+    virtual ~Litterale() = default; // 虚析构函数
 };
 
 class LitteraleNumerique : public Litterale {
 public:
-    // 转换为字符串
-    std::string toString() override = 0;
+    std::string toString() override = 0; // 获取字符串
 
-    // 提供创建对象接口
-    virtual LitteraleNumerique *simplifier() = 0;
+    virtual LitteraleNumerique *simplifier() = 0; // 简化并且重新定义类型
 
-    // 提供浮点数
-    [[nodiscard]] double toDouble() const override = 0;
+    [[nodiscard]] double toDouble() const override = 0; // 获取浮点数
 };
 
 class LitteraleAtome : public Litterale {
 private:
-    std::string nom_atome;  // atome
+    std::string nom_atome; // atome
 
 public:
-    // 获取字符串
-    std::string toString() override { return nom_atome; }
+    std::string toString() override { return nom_atome; } // 获取字符串
 
-    // 构造函数
-    explicit LitteraleAtome(std::string str_atome) : nom_atome(std::move(str_atome)) {}
+    explicit LitteraleAtome(std::string str_atome) : nom_atome(std::move(str_atome)) {} // 构造函数
 };
 
 class LitteraleExpression : public Litterale {
 private:
-    std::string nom_expression;  // expression
+    std::string nom_expression; // expression
 
 public:
-    // 获取字符串
-    std::string toString() override { return nom_expression; }
+    std::string toString() override { return nom_expression; } // 获取字符串
 
-    // 构造函数
-    explicit LitteraleExpression(std::string expression) : nom_expression(std::move(expression)) {}
+    explicit LitteraleExpression(std::string expression) : nom_expression(std::move(expression)) {} // 构造函数
 };
 
 class LitteraleSymbol : public Litterale {
 private:
     std::string nom_symbol;  // symbol
 
-    std::map<std::string, std::string> symbolTable;
+    std::map<std::string, std::string> symbolTable; // 存储STO关联符号
 
-    static LitteraleSymbol *instance;
+    static LitteraleSymbol *instance; // LitteraleSymbol
 
-    LitteraleSymbol() = default;
+    LitteraleSymbol() = default; // 私有构造器
 
-    ~LitteraleSymbol() override = default;
+    ~LitteraleSymbol() override = default; // 私有析构器
 
 public:
-    // 获取字符串
-    std::string toString() override { return nom_symbol; }
+    std::string toString() override { return nom_symbol; } // 获取字符串
 
-    LitteraleSymbol(const LitteraleSymbol &c) = delete;
+    LitteraleSymbol(const LitteraleSymbol &c) = delete; // 删除拷贝构造器
 
-    LitteraleSymbol &operator=(const LitteraleSymbol &c) = delete;
+    LitteraleSymbol &operator=(const LitteraleSymbol &c) = delete; // 删除赋值运算符
 
-    static LitteraleSymbol &getInstance();
+    static LitteraleSymbol &getInstance(); // 返回LitteraleSymbol类单一对象
 
-    void insert(const std::string &a, const std::string &b);
+    void insert(const std::string &a, const std::string &b); // 插入一个关联对
 
-    void remove(const std::string &a);
+    void remove(const std::string &a); // 删除一个关联对
 
-    friend std::string getSymbol(const std::string &a, LitteraleSymbol &LS);
+    friend std::string getSymbol(const std::string &a, LitteraleSymbol &LS); // 获取关联对中的value
 
-    friend bool estExist(const std::string &a, LitteraleSymbol &LS);
+    friend bool estExist(const std::string &a, LitteraleSymbol &LS); // map中是否存在该关联对
 };
 
 class LitteraleProgramme : public Litterale {
@@ -94,22 +83,17 @@ private:
     std::list<Litterale *> elements;  // Litterale指针数组
 
 public:
-    // 构造函数
-    LitteraleProgramme() = default;
+    LitteraleProgramme() = default; // 构造函数
 
-    explicit LitteraleProgramme(std::string programme);
+    explicit LitteraleProgramme(std::string programme); // 构造函数
 
-    // 转换为字符串
-    std::string toString() override;
+    std::string toString() override; // 转换为字符串
 
-    // 获得第一个元素
-    Litterale *getFirstElement();
+    Litterale *getFirstElement(); // 获得数组第一个元素并且删除该元素
 
-    // 获得数组大小
-    unsigned int getLength();
+    unsigned int getLength(); // 获得数组大小
 
-    // 加入数组最后
-    void elementsPushBack(Litterale *);
+    void elementsPushBack(Litterale *); // 加入数组最后
 };
 
 class LitteraleEntiere : public LitteraleNumerique {
@@ -119,89 +103,75 @@ private:
     friend class LitteraleFraction;  // 有理数类
 
     friend class LitteraleRationnelle;  // 实数类
-    // 私有构造器
-    explicit LitteraleEntiere(int);
 
-    // 唯一能创建对象的函数
-    friend LitteraleNumerique *toNumerique(double);
+    explicit LitteraleEntiere(int); // 私有构造器
+
+    friend LitteraleNumerique *toNumerique(double); // 唯一能创建Entiere对象的函数
 
 public:
-    // 转换为字符串
-    std::string toString() override { return std::to_string(entiere); }
+    std::string toString() override { return std::to_string(entiere); } // 获取字符串
 
-    // 给toRationnelle函数创建对象
-    LitteraleNumerique *simplifier() override;
+    LitteraleNumerique *simplifier() override; // 给toNumerique函数创建对象
 
-    // 转换成浮点数
-    [[nodiscard]] double toDouble() const override;
+    [[nodiscard]] double toDouble() const override; // 获取浮点数
 };
 
 class LitteraleFraction : public LitteraleNumerique {
 private:
     int numerateur;    // 分子
     int denominateur;  // 分母
-    // 私有构造器
-    LitteraleFraction(int n, int d);
 
-    // 能创建对象的函数
-    friend LitteraleNumerique *toNumerique(double);
+    LitteraleFraction(int n, int d); // 私有构造器
 
-    // 能创建对象的函数
-    friend LitteraleNumerique *getFraction(int, int);
+    friend LitteraleNumerique *toNumerique(double); // 能创建Fraction对象的函数
+
+    friend LitteraleNumerique *getFraction(int, int); // 能创建Fraction对象的函数
 
 public:
-    // 转换为字符串
-    std::string toString() override {
+    std::string toString() override { // 获取字符串
         return std::to_string(numerateur) + "/" + std::to_string(denominateur);
     }
 
-    // 转换为Entiere 或 Rationnelle
-    LitteraleNumerique *simplifier() override;
+    LitteraleNumerique *simplifier() override; // 给toNumerique函数创建对象
 
-    // 转换成浮点数
-    [[nodiscard]] double toDouble() const override;
+    [[nodiscard]] double toDouble() const override; // 获取浮点数
 
-    // 分数简化
-    void simplification();
+    void simplification(); // 分数简化
 };
 
 class LitteraleRationnelle : public LitteraleNumerique {
 private:
     int partie_entiere;   // 整数
     int partie_decimale;  // 小数
-    // 私有构造器
-    LitteraleRationnelle(int e, int d) : partie_entiere(e), partie_decimale(d) {}
 
-    // 唯一能创建对象函数
-    friend LitteraleNumerique *toNumerique(double);
+    LitteraleRationnelle(int e, int d) : partie_entiere(e), partie_decimale(d) {} // 私有构造器
+
+    friend LitteraleNumerique *toNumerique(double); // 唯一能创建Rationnelle对象函数
 
 public:
-    // 转换为字符串
-    std::string toString() override;
+    std::string toString() override; // 获取字符串
 
-    // 为toRationnelle函数创建对象
-    LitteraleNumerique *simplifier() override;
+    LitteraleNumerique *simplifier() override; // 给toNumerique函数创建对象
 
-    // 转换成浮点数
-    [[nodiscard]] double toDouble() const override;
+    [[nodiscard]] double toDouble() const override; // 获取浮点数
 };
 
-LitteraleNumerique *toNumerique(double);
+LitteraleNumerique *toNumerique(double); // 唯一能创建Numerique对象函数
 
-LitteraleNumerique *getFraction(int, int);
+LitteraleNumerique *getFraction(int, int); // 能创建Fraction对象的函数
 
-Litterale *toLitterale(const std::string &s);
+Litterale *toLitterale(const std::string &s); // 转换成Litterale
 
-std::string estQuelType(const std::string &s);
+std::string estQuelType(const std::string &s); // 判断是哪种类型
 
-bool estUnOperateurNotParameter(const std::string &s);
+bool estUnOperateurNotParameter(const std::string &s); // 判断是否为无参数运算符
 
-bool estUnOperateurUnaire(const std::string &s);
+bool estUnOperateurUnaire(const std::string &s); // 判断是否为一元运算符
 
-bool estUnOperateurBinaire(const std::string &s);
+bool estUnOperateurBinaire(const std::string &s); // 判断是否为二元运算符
 
-std::string getSymbol(const std::string &a, LitteraleSymbol &LS = LitteraleSymbol::getInstance());
+std::string getSymbol(const std::string &a, LitteraleSymbol &LS = LitteraleSymbol::getInstance()); // 获取关联对中的value
 
-bool estExist(const std::string &a, LitteraleSymbol &LS = LitteraleSymbol::getInstance());
+bool estExist(const std::string &a, LitteraleSymbol &LS = LitteraleSymbol::getInstance()); // map中是否存在该关联对
 
 #endif  // PROJECT_LITTERALE_H
