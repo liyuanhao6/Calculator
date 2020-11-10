@@ -28,33 +28,40 @@ void Controleur::commande(const std::string &s) {
     std::string type = estQuelType(s);
     if (type == "Programme")
         estProgramme(s);
-    else if (type == "Expression")
-        estExpression(s);
-    else if (type == "Symbol") {
-        std::string temp = getSymbol(s);
-        std::string newType = estQuelType(temp);
-        lirAff.push(toLitterale(temp));
-        if (newType == "Programme") estOperateur("EVAL");
-    } else if (type == "OperateurNotParameter")
-        estOperateur(s);
-    else if (type == "OperateurUnaire")
-        if (lirAff.taille() >= 1)
-            estOperateur(s);
-        else
-            throw std::invalid_argument("pas assez d'arguments");
-    else if (type == "OperateurBinaire")
-        if (lirAff.taille() >= 2)
-            estOperateur(s);
-        else
-            throw std::invalid_argument("pas assez d'arguments");
-    else if (type == "Fraction")
-        estFraction(s);
-    else if (type == "Rationnelle")
-        estRationnelle(s);
-    else if (type == "Entiere")
-        estEntiere(s);
-    else
-        throw std::invalid_argument("Erreur de format d'entree");
+    else{
+        std::stringstream check(s);
+        std::string intermediate;
+        while (std::getline(check, intermediate, ' ')){
+            std::string newType = estQuelType(intermediate);
+            if (newType == "Expression")
+                estExpression(intermediate);
+            else if (newType == "Symbol") {
+                std::string temp = getSymbol(intermediate);
+                std::string moreNewType = estQuelType(temp);
+                lirAff.push(toLitterale(temp));
+                if (moreNewType == "Programme") estOperateur("EVAL");
+            } else if (newType == "OperateurNotParameter")
+                estOperateur(intermediate);
+            else if (newType == "OperateurUnaire")
+                if (lirAff.taille() >= 1)
+                    estOperateur(intermediate);
+                else
+                    throw std::invalid_argument("pas assez d'arguments");
+            else if (newType == "OperateurBinaire")
+                if (lirAff.taille() >= 2)
+                    estOperateur(intermediate);
+                else
+                    throw std::invalid_argument("pas assez d'arguments");
+            else if (newType == "Fraction")
+                estFraction(intermediate);
+            else if (newType == "Rationnelle")
+                estRationnelle(intermediate);
+            else if (newType == "Entiere")
+                estEntiere(intermediate);
+            else
+                throw std::invalid_argument("Erreur de format d'entree");
+        }
+    }
 }
 
 void Controleur::estOperateur(const std::string &s) {
