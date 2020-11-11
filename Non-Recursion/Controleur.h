@@ -6,7 +6,6 @@
 #include <stdexcept>
 #include <vector>
 
-#include "Est.h"
 #include "Operateur.h"
 #include "Pile.h"
 

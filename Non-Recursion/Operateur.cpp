@@ -283,14 +283,14 @@ void Operator_Eval::Action() {
             Litterale *tempL = LirProgramme->getFirstElement();
             std::string tempS = tempL->toString();
             std::string newType = estQuelType(tempS);
+            LitteraleFactory *lirFac = nullptr;
             if (newType == "Programme")
-                estProgramme(tempS);
+                lirFac = new LitteraleProgrammeFactoty();
             else if (newType == "Expression"){
-                estExpression(tempS);
+                lirFac = new LitteraleExpressionFactoty();
                 Operator *opt = toOperator("EVAL");
                 opt->Action();
-            }
-            else if (newType == "Symbol")
+            } else if (newType == "Symbol")
                 lirAff.push(toLitterale(getSymbol(tempS)));
             else if (newType == "OperateurNotParameter") {
                 Operator *opt = toOperator(tempS);
@@ -308,14 +308,17 @@ void Operator_Eval::Action() {
                 } else
                     throw std::invalid_argument("Erreur : pas assez d'arguments");
             else if (newType == "Fraction")
-                estFraction(tempS);
+                lirFac = new LitteraleFractionFactoty();
             else if (newType == "Rationnelle")
-                estRationnelle(tempS);
+                lirFac = new LitteraleRationnelleFactoty();
             else if (newType == "Entiere")
-                estEntiere(tempS);
+                lirFac = new LitteraleEntiereFactoty();
             else
                 throw std::invalid_argument("Symbole inconnu");
-            // Undo 指令
+            if (newType != "OperateurNotParameter" && newType != "OperateurUnaire" && newType != "OperateurBinaire" && newType != "Expression") {
+                lirAff.push(lirFac->FactoryMethod(tempS));
+                lirAff.setMessage("Ajouter des donnees de type de " + lirFac->ProductType());
+            }
         }
     } else if (type == "Expression") {
         auto temp = getSymbol(tempStr.substr(1, tempStr.size() - 2));
@@ -435,14 +438,14 @@ Operator *toOperator(const std::string &s) {
     else throw std::logic_error("Erreur de saisie");
 }
 
-std::tuple<double, std::string> getOneSetData() {
+std::tuple<double, std::string> getOneSetData(Pile &lirAff) {
     double v1 = lirAff.top()->toDouble();
     std::string str1 = lirAff.top()->toString();
     lirAff.pop();
     return {v1, str1};
 }
 
-std::tuple<double, double, std::string, std::string> getTwoSetData() {
+std::tuple<double, double, std::string, std::string> getTwoSetData(Pile &lirAff) {
     double v1 = lirAff.top()->toDouble();
     std::string str1 = lirAff.top()->toString();
     lirAff.pop();
@@ -452,7 +455,7 @@ std::tuple<double, double, std::string, std::string> getTwoSetData() {
     return {v1, v2, str1, str2};
 }
 
-void fromExpressionToSymbol(const std::string &s) {
+void fromExpressionToSymbol(const std::string &s, Pile &lirAff) {
     auto temp = getSymbol(s.substr(1, s.size() - 2));
     std::string newType = estQuelType(temp);
     lirAff.push(toLitterale(temp));

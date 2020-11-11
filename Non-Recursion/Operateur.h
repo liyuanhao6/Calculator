@@ -6,23 +6,12 @@
 #include <tuple>
 #include <vector>
 
-#include "Est.h"
 #include "Litterale.h"
 #include "Pile.h"
 
 class Operator {
 private:
     std::string mes; // Types d'operateurs
-
-    friend void estProgramme(const std::string &s); //  Les donnees de type Programme sont generees et stockees("push")
-
-    friend void estExpression(const std::string &s); //  Les donnees de type Expression sont generees et stockees("push")
-
-    friend void estFraction(const std::string &s); //  Les donnees de type Fraction sont generees et stockees("push")
-
-    friend void estRationnelle(const std::string &s); // Les donnees de type Rationnelle sont generees et stockees("push")
-
-    friend void estEntiere(const std::string &s); // Les donnees de type Entiere sont generees et stockees("push")
 
 public:
     Pile &lirAff = Pile::getInstance(); // interface unique de class pile
@@ -436,10 +425,10 @@ public:
 
 Operator *toOperator(const std::string &s); // Obtenir le pointeur toOperator
 
-std::tuple<double, std::string> getOneSetData(); // Obtenir un ensemble de donnees std::tuple<double, std::string>
+std::tuple<double, std::string> getOneSetData(Pile &lirAff = Pile::getInstance()); // Obtenir un ensemble de donnees std::tuple<double, std::string>
 
-std::tuple<double, double, std::string, std::string> getTwoSetData(); // Obtenir deux ensembles de donnees std::tuple<double, std::string>
+std::tuple<double, double, std::string, std::string> getTwoSetData(Pile &lirAff = Pile::getInstance()); // Obtenir deux ensembles de donnees std::tuple<double, std::string>
 
-void fromExpressionToSymbol(const std::string &s); // Convertir les donnees de type Expression en donnees de type Symbole
+void fromExpressionToSymbol(const std::string &s, Pile &lirAff = Pile::getInstance()); // Convertir les donnees de type Expression en donnees de type Symbole
 
 #endif  // PROJECT_OPERATEUR_H

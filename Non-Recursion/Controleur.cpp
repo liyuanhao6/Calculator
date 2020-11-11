@@ -26,15 +26,16 @@ void Controleur::executer() {
 
 void Controleur::commande(const std::string &s) {
     std::string type = estQuelType(s);
+    LitteraleFactory *lirFac = nullptr;
     if (type == "Programme")
-        estProgramme(s);
+        lirFac = new LitteraleProgrammeFactoty;
     else{
         std::stringstream check(s);
         std::string intermediate;
         while (std::getline(check, intermediate, ' ')){
             std::string newType = estQuelType(intermediate);
             if (newType == "Expression")
-                estExpression(intermediate);
+                lirFac = new LitteraleExpressionFactoty;
             else if (newType == "Symbol") {
                 std::string temp = getSymbol(intermediate);
                 std::string moreNewType = estQuelType(temp);
@@ -53,14 +54,22 @@ void Controleur::commande(const std::string &s) {
                 else
                     throw std::invalid_argument("pas assez d'arguments");
             else if (newType == "Fraction")
-                estFraction(intermediate);
+                lirFac = new LitteraleFractionFactoty;
             else if (newType == "Rationnelle")
-                estRationnelle(intermediate);
+                lirFac = new LitteraleRationnelleFactoty;
             else if (newType == "Entiere")
-                estEntiere(intermediate);
+                lirFac = new LitteraleEntiereFactoty;
             else
                 throw std::invalid_argument("Erreur de format d'entree");
+            if (newType != "OperateurNotParameter" && newType != "OperateurUnaire" && newType != "OperateurBinaire" && newType != "Symbol") {
+                lirAff.push(lirFac->FactoryMethod(intermediate));
+                lirAff.setMessage("Ajouter des donnees de type de " + lirFac->ProductType());
+            }
         }
+    }
+    if (type == "Programme") {
+        lirAff.push(lirFac->FactoryMethod(s));
+        lirAff.setMessage("Ajouter des donnees de type de " + lirFac->ProductType());
     }
 }
 

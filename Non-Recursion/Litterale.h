@@ -174,4 +174,73 @@ std::string getSymbol(const std::string &a, LitteraleSymbol &LS = LitteraleSymbo
 
 bool estExist(const std::string &a, LitteraleSymbol &LS = LitteraleSymbol::getInstance()); // si la paire d'associations existe dans map
 
+class LitteraleFactory {
+public:
+    virtual ~LitteraleFactory()=default;
+    [[nodiscard]] virtual Litterale* FactoryMethod(const std::string &s) const = 0;
+    [[nodiscard]] virtual std::string ProductType() const = 0;
+};
+
+class LitteraleAtomeFactoty : public  LitteraleFactory {
+public:
+    [[nodiscard]] Litterale* FactoryMethod(const std::string &s) const override {
+        return new LitteraleAtome(s);
+    }
+    [[nodiscard]] std::string ProductType() const override { return "Atome";}
+};
+
+class LitteraleExpressionFactoty : public LitteraleFactory {
+public:
+    [[nodiscard]] Litterale* FactoryMethod(const std::string &s) const override {
+        return new LitteraleExpression(s);
+    }
+    [[nodiscard]] std::string ProductType() const override { return "Expression";}
+};
+
+class LitteraleSymbolFactoty : public LitteraleFactory {
+public:
+    [[nodiscard]] Litterale* FactoryMethod(const std::string &s) const override {
+        return toLitterale(getSymbol(s));
+    }
+    [[nodiscard]] std::string ProductType() const override { return "Symbol";}
+};
+
+class LitteraleProgrammeFactoty : public LitteraleFactory {
+public:
+    [[nodiscard]] Litterale* FactoryMethod(const std::string &s) const override {
+        return new LitteraleProgramme(s);
+    }
+    [[nodiscard]] std::string ProductType() const override { return "Programme";}
+};
+
+class LitteraleEntiereFactoty : public LitteraleFactory {
+public:
+    [[nodiscard]] Litterale* FactoryMethod(const std::string &s) const override {
+        return toNumerique(std::stod(s));
+    }
+    [[nodiscard]] std::string ProductType() const override { return "Entiere";}
+};
+
+class LitteraleFractionFactoty : public LitteraleFactory {
+public:
+    [[nodiscard]] Litterale* FactoryMethod(const std::string &s) const override {
+        unsigned int pos = s.find('/');
+        unsigned int len = s.length();
+        std::string t1 = s.substr(pos + 1, len - pos);
+        int denominateur = std::stoi(t1);
+        std::string t2 = s.substr(0, pos);
+        int numerateur = std::stoi(t2);
+        return getFraction(numerateur, denominateur);
+    }
+    [[nodiscard]] std::string ProductType() const override { return "Fraction";}
+};
+
+class LitteraleRationnelleFactoty : public LitteraleFactory {
+public:
+    [[nodiscard]] Litterale* FactoryMethod(const std::string &s) const override {
+        return toNumerique(std::stod(s));
+    }
+    [[nodiscard]] std::string ProductType() const override { return "Rationnelle";}
+};
+
 #endif  // PROJECT_LITTERALE_H

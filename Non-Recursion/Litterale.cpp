@@ -99,7 +99,7 @@ LitteraleProgramme::LitteraleProgramme(std::string programme) {
         else if (programme[i] == '[') {
             unsigned int j = 0;
             while (programme[i + j] != ']') j++;
-            elementsPushBack(toLitterale(programme.substr(i, j + 1)));
+            elementsPushBack(new LitteraleProgramme(programme.substr(i, j + 1)));
             i += j;
         } else {
             unsigned int j = 0;
@@ -161,7 +161,7 @@ LitteraleNumerique *toNumerique(double num_double) {
     if (str_mantisse.length() > 3)
         return LitteraleRationnelle(num_partie_entiere, num_mantisse).simplifier();
     else {
-        int n = num_double;
+        int n = num_partie_entiere;
         int d = 1;
         for (unsigned int i = 0; i < std::to_string(num_mantisse).length(); i++) {
             std::string temp(1, str_mantisse[i]);
@@ -176,31 +176,25 @@ LitteraleNumerique *getFraction(int n, int d) { return new LitteraleFraction(n, 
 
 Litterale *toLitterale(const std::string &s) {
     std::string type = estQuelType(s);
+    LitteraleFactory* lirFac = nullptr;
     if (type == "Programme")
-        return new LitteraleProgramme(s);
+        lirFac = new LitteraleProgrammeFactoty();
     else if (type == "Expression")
-        return new LitteraleExpression(s);
+        lirFac = new LitteraleExpressionFactoty();
     else if (type == "Symbol") {
-        return toLitterale(getSymbol(s));
+        lirFac = new LitteraleSymbolFactoty();
     } else if (type == "OperateurNotParameter" || type == "OperateurUnaire" ||
                type == "OperateurBinaire")
-        return new LitteraleAtome(s);
+        lirFac = new LitteraleAtomeFactoty();
     else if (type == "Fraction") {
-        unsigned int pos = s.find('/');
-        unsigned int len = s.length();
-        std::string t1 = s.substr(pos + 1, len - pos);
-        int denominateur = std::stoi(t1);
-        std::string t2 = s.substr(0, pos);
-        int numerateur = std::stoi(t2);
-        return getFraction(numerateur, denominateur);
+        lirFac = new LitteraleFractionFactoty();
     } else if (type == "Rationnelle") {
-        auto num = std::stod(s);
-        return toNumerique(num);
+        lirFac = new LitteraleRationnelleFactoty();
     } else if (type == "Entiere") {
-        auto num = std::stod(s);
-        return toNumerique(num);
+        lirFac = new LitteraleEntiereFactoty();
     } else
         throw std::invalid_argument("erreur de saisie");
+    return lirFac->FactoryMethod(s);
 }
 
 std::string estQuelType(const std::string &s) {
