@@ -9,16 +9,16 @@
 
 #include "Pile.h"
 
-static Pile &lirAff = Pile::getInstance(); // Pile类单一接口
+static Pile &lirAff = Pile::getInstance(); //  interface unique de class pile
 
-void estProgramme(const std::string &s); // 生成Programme类型数据并压栈
+void estProgramme(const std::string &s); // Les donnees de type Programme sont generees et stockees("push")
 
-void estExpression(const std::string &s); // 生成Expression类型数据并压栈
+void estExpression(const std::string &s); // Les donnees de type Expression sont generees et stockees("push")
 
-void estFraction(const std::string &s); // 生成Fraction类型数据并压栈
+void estFraction(const std::string &s); // Les donnees de type Fraction sont generees et stockees("push")
 
-void estRationnelle(const std::string &s); // 生成Rationnelle类型数据并压栈
+void estRationnelle(const std::string &s); // Les donnees de type Rationnelle sont generees et stockees("push")
 
-void estEntiere(const std::string &s); // 生成Entiere类型数据并压栈
+void estEntiere(const std::string &s); // Les donnees de type Entiere sont generees et stockees("push")
 
 #endif  // PROJECT_EST_H

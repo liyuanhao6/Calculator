@@ -12,30 +12,30 @@
 
 class Operator {
 private:
-    std::string mes; // 运算符种类
+    std::string mes; // Types d'operateurs
 
-    friend void estProgramme(const std::string &s); // 生成Programme类型数据并压栈
+    friend void estProgramme(const std::string &s); //  Les donnees de type Programme sont generees et stockees("push")
 
-    friend void estExpression(const std::string &s); // 生成Expression类型数据并压栈
+    friend void estExpression(const std::string &s); //  Les donnees de type Expression sont generees et stockees("push")
 
-    friend void estFraction(const std::string &s); // 生成Fraction类型数据并压栈
+    friend void estFraction(const std::string &s); //  Les donnees de type Fraction sont generees et stockees("push")
 
-    friend void estRationnelle(const std::string &s); // 生成Rationnelle类型数据并压栈
+    friend void estRationnelle(const std::string &s); // Les donnees de type Rationnelle sont generees et stockees("push")
 
-    friend void estEntiere(const std::string &s); // 生成Entiere类型数据并压栈
+    friend void estEntiere(const std::string &s); // Les donnees de type Entiere sont generees et stockees("push")
 
 public:
-    Pile &lirAff = Pile::getInstance(); // Pile类单一接口
+    Pile &lirAff = Pile::getInstance(); // interface unique de class pile
 
-    LitteraleSymbol &symbols = LitteraleSymbol::getInstance(); // LitteraleSymbol类单一接口
+    LitteraleSymbol &symbols = LitteraleSymbol::getInstance(); // Interface unique de classe LitteraleSymbol
 
-    explicit Operator(std::string m) : mes(std::move(m)){}; // 构造函数
+    explicit Operator(std::string m) : mes(std::move(m)){}; // Constructeur
 
-    [[nodiscard]] virtual const std::string &type_of_litterale() const = 0; // 调用getMes获取信息
+    [[nodiscard]] virtual const std::string &type_of_litterale() const = 0; // Appeler getMes pour obtenir des informations
 
-    virtual void Action() = 0; // 运算操作
+    virtual void Action() = 0; // Operation
 
-    [[nodiscard]] const std::string &getMes() const { return mes; } // 获取运算符种类信息
+    [[nodiscard]] const std::string &getMes() const { return mes; } // Obtenir des informations sur le type d'operateur
 };
 
 class Operator_Plus : public Operator {
@@ -434,12 +434,12 @@ public:
     virtual ~Operator_Forget() = default;
 };
 
-Operator *toOperator(const std::string &s); // 获取toOperator指针
+Operator *toOperator(const std::string &s); // Obtenir le pointeur toOperator
 
-std::tuple<double, std::string> getOneSetData(); // 获取一组数据 std::tuple<double, std::string>
+std::tuple<double, std::string> getOneSetData(); // Obtenir un ensemble de donnees std::tuple<double, std::string>
 
-std::tuple<double, double, std::string, std::string> getTwoSetData(); // 获取两组数据 std::tuple<double, std::string>
+std::tuple<double, double, std::string, std::string> getTwoSetData(); // Obtenir deux ensembles de donnees std::tuple<double, std::string>
 
-void fromExpressionToSymbol(const std::string &s); // 将Expression类型数据转换为Symbol类型数据
+void fromExpressionToSymbol(const std::string &s); // Convertir les donnees de type Expression en donnees de type Symbole
 
 #endif  // PROJECT_OPERATEUR_H

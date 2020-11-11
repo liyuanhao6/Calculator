@@ -12,20 +12,20 @@
 
 class Litterale {
 public:
-    virtual std::string toString() = 0; // 获取字符串
+    virtual std::string toString() = 0; // Obtenir une chaine
 
-    [[nodiscard]] virtual double toDouble() const { return 0; }; // 获取浮点数
+    [[nodiscard]] virtual double toDouble() const { return 0; }; // Obtenir un nombre a virgule flottante
 
-    virtual ~Litterale() = default; // 虚析构函数
+    virtual ~Litterale() = default; // Destructeur virtuel
 };
 
 class LitteraleNumerique : public Litterale {
 public:
-    std::string toString() override = 0; // 获取字符串
+    std::string toString() override = 0; // Obtenir une chaine
 
-    virtual LitteraleNumerique *simplifier() = 0; // 简化并且重新定义类型
+    virtual LitteraleNumerique *simplifier() = 0; // Simplifier et redefinir les types
 
-    [[nodiscard]] double toDouble() const override = 0; // 获取浮点数
+    [[nodiscard]] double toDouble() const override = 0; // Obtenir un nombre a virgule flottante
 };
 
 class LitteraleAtome : public Litterale {
@@ -33,9 +33,9 @@ private:
     std::string nom_atome; // atome
 
 public:
-    std::string toString() override { return nom_atome; } // 获取字符串
+    std::string toString() override { return nom_atome; } // Obtenir une chaine
 
-    explicit LitteraleAtome(std::string str_atome) : nom_atome(std::move(str_atome)) {} // 构造函数
+    explicit LitteraleAtome(std::string str_atome) : nom_atome(std::move(str_atome)) {} // Constructeur
 };
 
 class LitteraleExpression : public Litterale {
@@ -43,135 +43,135 @@ private:
     std::string nom_expression; // expression
 
 public:
-    std::string toString() override { return nom_expression; } // 获取字符串
+    std::string toString() override { return nom_expression; } // Obtenir une chaine
 
-    explicit LitteraleExpression(std::string expression) : nom_expression(std::move(expression)) {} // 构造函数
+    explicit LitteraleExpression(std::string expression) : nom_expression(std::move(expression)) {} // Constructeur
 };
 
 class LitteraleSymbol : public Litterale {
 private:
     std::string nom_symbol;  // symbol
 
-    std::map<std::string, std::string> symbolTable; // 存储STO关联符号
+    std::map<std::string, std::string> symbolTable; // Stocker les symboles associes à STO
 
     static LitteraleSymbol *instance; // LitteraleSymbol
 
-    LitteraleSymbol() = default; // 私有构造器
+    LitteraleSymbol() = default; // constructeur prive
 
-    ~LitteraleSymbol() override = default; // 私有析构器
+    ~LitteraleSymbol() override = default; // destructeur prive
 
 public:
-    std::string toString() override { return nom_symbol; } // 获取字符串
+    std::string toString() override { return nom_symbol; } // Obtenir une chaine
 
-    LitteraleSymbol(const LitteraleSymbol &c) = delete; // 删除拷贝构造器
+    LitteraleSymbol(const LitteraleSymbol &c) = delete; // Supprimer le constructeur de copie
 
-    LitteraleSymbol &operator=(const LitteraleSymbol &c) = delete; // 删除赋值运算符
+    LitteraleSymbol &operator=(const LitteraleSymbol &c) = delete; // Supprimer l'operateur d'affectation
 
-    static LitteraleSymbol &getInstance(); // 返回LitteraleSymbol类单一对象
+    static LitteraleSymbol &getInstance(); // Renvoie un seul objet de la classe LitteraleSymbol
 
-    void insert(const std::string &a, const std::string &b); // 插入一个关联对
+    void insert(const std::string &a, const std::string &b); // Inserer une paire associee
 
-    void remove(const std::string &a); // 删除一个关联对
+    void remove(const std::string &a); // Supprimer une paire associee
 
-    friend std::string getSymbol(const std::string &a, LitteraleSymbol &LS); // 获取关联对中的value
+    friend std::string getSymbol(const std::string &a, LitteraleSymbol &LS); // Obtenir la valeur dans la paire d'associations
 
-    friend bool estExist(const std::string &a, LitteraleSymbol &LS); // map中是否存在该关联对
+    friend bool estExist(const std::string &a, LitteraleSymbol &LS); // si la paire d'associations existe dans map
 };
 
 class LitteraleProgramme : public Litterale {
 private:
-    std::list<Litterale *> elements;  // Litterale指针数组
+    std::list<Litterale *> elements;  // Litterale tableau de pointeurs
 
 public:
-    LitteraleProgramme() = default; // 构造函数
+    LitteraleProgramme() = default; // Constructeur
 
-    explicit LitteraleProgramme(std::string programme); // 构造函数
+    explicit LitteraleProgramme(std::string programme); // Constructeur
 
-    std::string toString() override; // 转换为字符串
+    std::string toString() override; // Convertir en chaine
 
-    Litterale *getFirstElement(); // 获得数组第一个元素并且删除该元素
+    Litterale *getFirstElement(); //Obtenir le premier element du tableau et supprimer-le
 
-    unsigned int getLength(); // 获得数组大小
+    unsigned int getLength(); // Obtenir la taille du tableau
 
-    void elementsPushBack(Litterale *); // 加入数组最后
+    void elementsPushBack(Litterale *); //Ajouter a la fin du tableau
 };
 
 class LitteraleEntiere : public LitteraleNumerique {
 private:
-    int entiere;  // 整数
+    int entiere;  // nombre entier
 
-    friend class LitteraleFraction;  // 有理数类
+    friend class LitteraleFraction;  // class de nombre rationnel
 
-    friend class LitteraleRationnelle;  // 实数类
+    friend class LitteraleRationnelle;  // Classe de nombre reel
 
-    explicit LitteraleEntiere(int); // 私有构造器
+    explicit LitteraleEntiere(int); //destructeur prive
 
-    friend LitteraleNumerique *toNumerique(double); // 唯一能创建Entiere对象的函数
+    friend LitteraleNumerique *toNumerique(double); // La seule fonction qui permet de creer des objets Entiere
 
 public:
-    std::string toString() override { return std::to_string(entiere); } // 获取字符串
+    std::string toString() override { return std::to_string(entiere); } // Obtenir une chaine
 
-    LitteraleNumerique *simplifier() override; // 给toNumerique函数创建对象
+    LitteraleNumerique *simplifier() override; // Creer un objet pour la fonction toNumerique
 
-    [[nodiscard]] double toDouble() const override; // 获取浮点数
+    [[nodiscard]] double toDouble() const override; // Obtenir un nombre a virgule flottante
 };
 
 class LitteraleFraction : public LitteraleNumerique {
 private:
-    int numerateur;    // 分子
-    int denominateur;  // 分母
+    int numerateur;    // numerateur
+    int denominateur;  // denominateur
 
-    LitteraleFraction(int n, int d); // 私有构造器
+    LitteraleFraction(int n, int d); // destructeur prive
 
-    friend LitteraleNumerique *toNumerique(double); // 能创建Fraction对象的函数
+    friend LitteraleNumerique *toNumerique(double); // Fonctions permettant de creer des objets Fraction
 
-    friend LitteraleNumerique *getFraction(int, int); // 能创建Fraction对象的函数
+    friend LitteraleNumerique *getFraction(int, int); // Fonctions permettant de creer des objets Fraction
 
 public:
-    std::string toString() override { // 获取字符串
+    std::string toString() override { // Obtenir une chaine
         return std::to_string(numerateur) + "/" + std::to_string(denominateur);
     }
 
-    LitteraleNumerique *simplifier() override; // 给toNumerique函数创建对象
+    LitteraleNumerique *simplifier() override; // Creer un objet pour la fonction toNumerique
 
-    [[nodiscard]] double toDouble() const override; // 获取浮点数
+    [[nodiscard]] double toDouble() const override; //Obtenir un nombre a virgule flottante
 
-    void simplification(); // 分数简化
+    void simplification(); // Reduction de fraction
 };
 
 class LitteraleRationnelle : public LitteraleNumerique {
 private:
-    int partie_entiere;   // 整数
-    int partie_decimale;  // 小数
+    int partie_entiere;   // nombre entier
+    int partie_decimale;  // fraction decimale
 
-    LitteraleRationnelle(int e, int d) : partie_entiere(e), partie_decimale(d) {} // 私有构造器
+    LitteraleRationnelle(int e, int d) : partie_entiere(e), partie_decimale(d) {} // destructeur prive
 
-    friend LitteraleNumerique *toNumerique(double); // 唯一能创建Rationnelle对象函数
+    friend LitteraleNumerique *toNumerique(double); // La seule fonction qui permet de creer des objets Rationale
 
 public:
-    std::string toString() override; // 获取字符串
+    std::string toString() override; // Obtenir une chaine
 
-    LitteraleNumerique *simplifier() override; // 给toNumerique函数创建对象
+    LitteraleNumerique *simplifier() override; //  Creer un objet pour la fonction toNumerique
 
-    [[nodiscard]] double toDouble() const override; // 获取浮点数
+    [[nodiscard]] double toDouble() const override; // Obtenir un nombre a virgule flottante
 };
 
-LitteraleNumerique *toNumerique(double); // 唯一能创建Numerique对象函数
+LitteraleNumerique *toNumerique(double); // La seule fonction qui permet de creer des objets numeriques
 
-LitteraleNumerique *getFraction(int, int); // 能创建Fraction对象的函数
+LitteraleNumerique *getFraction(int, int); // Fonctions permettant de creer des objets Fraction
 
-Litterale *toLitterale(const std::string &s); // 转换成Litterale
+Litterale *toLitterale(const std::string &s); // Convertir en Litterale
 
-std::string estQuelType(const std::string &s); // 判断是哪种类型
+std::string estQuelType(const std::string &s); // Determinez quel type
 
-bool estUnOperateurNotParameter(const std::string &s); // 判断是否为无参数运算符
+bool estUnOperateurNotParameter(const std::string &s); // Determiner s'il s'agit d'un operateur sans parametre
 
-bool estUnOperateurUnaire(const std::string &s); // 判断是否为一元运算符
+bool estUnOperateurUnaire(const std::string &s); // Determiner s'il s'agit d'un operateur unaire
 
-bool estUnOperateurBinaire(const std::string &s); // 判断是否为二元运算符
+bool estUnOperateurBinaire(const std::string &s); // Determinez s'il s'agit d'un operateur binaire
 
-std::string getSymbol(const std::string &a, LitteraleSymbol &LS = LitteraleSymbol::getInstance()); // 获取关联对中的value
+std::string getSymbol(const std::string &a, LitteraleSymbol &LS = LitteraleSymbol::getInstance()); // Obtenir la valeur dans la paire d'associations
 
-bool estExist(const std::string &a, LitteraleSymbol &LS = LitteraleSymbol::getInstance()); // map中是否存在该关联对
+bool estExist(const std::string &a, LitteraleSymbol &LS = LitteraleSymbol::getInstance()); // si la paire d'associations existe dans map
 
 #endif  // PROJECT_LITTERALE_H

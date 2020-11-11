@@ -11,33 +11,33 @@
 
 class Pile {
 private:
-    std::vector<Litterale *> litterales; // Litterale指针数组
-    unsigned int nbAffiche = 4; // 打印Litterale指针数组最大数量
-    std::string message; // 显示运算及异常信息
-    static Pile *instance;  // Pile类单一指针
-    Pile() = default; // 私有构造器
-    ~Pile() = default; // 私有析构函数
+    std::vector<Litterale *> litterales; // Tableau de pointeurs Litterale
+    unsigned int nbAffiche = 4; // Imprimer le nombre maximum de tableau de pointeurs Litterale
+    std::string message; // afficher les calculs et les informations d'exception
+    static Pile *instance;  //Pointeur unique de classe de pile
+    Pile() = default; // constructeur prive
+    ~Pile() = default; // destructeur prive
 
 public:
-    Pile(const Pile &optFac) = delete; // 删除拷贝构造器
+    Pile(const Pile &optFac) = delete; // Supprimer le constructeur de copie
 
-    Pile &operator=(const Pile &optFac) = delete; // 删除赋值运算符
+    Pile &operator=(const Pile &optFac) = delete; // Supprimer l'operateur d'affectation
 
-    static Pile &getInstance(); // 返回Pile类单一对象
+    static Pile &getInstance(); // Renvoie un seul objet de la classe Pile
 
-    void affiche() const; // 打印计算器页面
+    void affiche() const; // Imprimer la page de la calculatrice
 
-    void push(Litterale *l); // 添加Litterale指针数组最后一个元素
+    void push(Litterale *l); // Ajouter le dernier element du tableau de pointeur Litterale
 
-    void pop(); // 删除Litterale指针数组最后一个元素
+    void pop(); // Supprimer le dernier element du tableau de pointeur Litterale
 
-    [[nodiscard]] unsigned int taille() const; // Litterale指针数组大小
+    [[nodiscard]] unsigned int taille() const; //Taille du tableau de pointeur Litterale
 
-    [[nodiscard]] Litterale *top() const; // 返回Litterale指针数组最后一个元素
+    [[nodiscard]] Litterale *top() const; // Renvoie le dernier element du tableau de pointeur Litterale
 
-    void clear(); // 清空Litterale指针数组
+    void clear(); // Effacer le tableau de pointeurs Litterale
 
-    void setMessage(const std::string &m); // 设置运算及异常信息
+    void setMessage(const std::string &m); // Definir les informations de calcul et d'exception
 };
 
 #endif  // PROJECT_PILE_H
